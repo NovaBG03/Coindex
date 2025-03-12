@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:Coindex.App.ViewModels"
+             xmlns:entities="clr-namespace:Coindex.Core.Domain.Entities;assembly=Coindex.Core"
+             x:Class="Coindex.App.Views.CoinsPage"
+             x:DataType="viewmodel:CoinsViewModel"
+             Title="{Binding Title}">
+
+    <Grid RowDefinitions="Auto,*,Auto" Padding="20">
+        <!-- Add Coin Form -->
+        <VerticalStackLayout Grid.Row="0" Spacing="10">
+            <Label Text="Add New Coin" FontAttributes="Bold" FontSize="Medium" />
+            <Entry Placeholder="Coin Name" Text="{Binding NewCoinName}" />
+            <Entry Placeholder="Description" Text="{Binding NewCoinDescription}" />
+            <Button Text="Add Coin" Command="{Binding AddCoinCommand}"
+                    HorizontalOptions="Fill" Margin="0,10,0,20" />
+        </VerticalStackLayout>
+
+        <!-- Coin List -->
+        <RefreshView Grid.Row="1" Command="{Binding LoadCoinsCommand}" IsRefreshing="{Binding IsBusy}">
+            <CollectionView ItemsSource="{Binding Coins}">
+                <CollectionView.EmptyView>
+                    <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                        <Label Text="No coins in your collection" />
+                        <Label Text="Add your first coin above" />
+                    </StackLayout>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="entities:Coin">
+                        <Border Margin="0,5" Padding="15">
+                            <StackLayout>
+                                <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="Medium" />
+                                <Label Text="{Binding Description}" FontSize="Small" />
+                            </StackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </Grid>
+</ContentPage>
