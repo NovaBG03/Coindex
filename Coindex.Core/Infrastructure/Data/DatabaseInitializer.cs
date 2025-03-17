@@ -9,6 +9,7 @@ public class DatabaseInitializer(ApplicationDbContext context)
     {
         await context.Database.EnsureCreatedAsync();
 
+        return;
         if (!await context.Coins.AnyAsync())
         {
             var coins = new List<Coin>

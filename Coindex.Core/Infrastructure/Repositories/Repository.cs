@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Coindex.Core.Infrastructure.Repositories;
 
 public class Repository<T>(ApplicationDbContext context) : IRepository<T>
-    where T : Entity
+    where T : BaseEntity
 {
     protected readonly ApplicationDbContext Context = context;
     protected readonly DbSet<T> DbSet = context.Set<T>();

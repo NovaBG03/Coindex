@@ -2,7 +2,7 @@ using Coindex.Core.Domain.Entities;
 
 namespace Coindex.Core.Application.Interfaces.Repositories;
 
-public interface IRepository<T> where T : Entity
+public interface IRepository<T> where T : BaseEntity
 {
     Task<T?> GetByIdAsync(int id);
     Task<IEnumerable<T>> GetAllAsync();

@@ -1,26 +1,65 @@
 using Coindex.Core.Domain.Entities;
+using Coindex.Core.Infrastructure.Interceptor;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Coindex.Core.Infrastructure.Data;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {
-    public DbSet<Coin> Coins { get; set; }
+    public DbSet<CollectableItem> CollectableItems { get; set; } = null!;
+    public DbSet<Coin> Coins { get; set; } = null!;
+    public DbSet<Bill> Bills { get; set; } = null!;
+    public DbSet<CollectableItemImage> CollectableItemImages { get; set; } = null!;
+    public DbSet<Tag> Tags { get; set; } = null!;
 
-    protected override void OnModelCreating(ModelBuilder builder)
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        base.OnModelCreating(builder);
+        base.OnConfiguring(optionsBuilder);
+        optionsBuilder.AddInterceptors(new TimestampInterceptor());
+    }
 
-        builder.Entity<Coin>(coin =>
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Ignore<BaseEntity>();
+
+        modelBuilder.Entity<CollectableItem>(collectableItem =>
         {
-            coin.HasKey(c => c.Id);
+            ConfigureBaseEntity(collectableItem);
+            collectableItem.UseTptMappingStrategy();
 
-            coin.Property(c => c.Name)
+            collectableItem.Property(ci => ci.Name)
                 .IsRequired()
                 .HasMaxLength(100);
 
-            coin.Property(c => c.Description)
+            collectableItem.Property(c => c.Description)
                 .HasMaxLength(500);
+
+            collectableItem.HasMany(ci => ci.Tags)
+                .WithMany(t => t.CollectableItems);
+
+            collectableItem.HasMany(ci => ci.Images)
+                .WithOne(img => img.CollectableItem)
+                .HasForeignKey(img => img.CollectableItemId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
+
+        // modelBuilder.Entity<Bill>(bill => { });
+        // modelBuilder.Entity<Coin>(coin => { });
+        modelBuilder.Entity<CollectableItemImage>(itemImage => { ConfigureBaseEntity(itemImage); });
+
+        modelBuilder.Entity<Tag>(tag =>
+        {
+            ConfigureBaseEntity(tag);
+            tag.HasIndex(t => t.Name)
+                .IsUnique();
+        });
+    }
+
+    private static void ConfigureBaseEntity<T>(EntityTypeBuilder<T> baseEntity) where T : BaseEntity
+    {
+        baseEntity.HasKey(e => e.Id);
     }
 }
