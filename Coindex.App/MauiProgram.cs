@@ -52,8 +52,7 @@ public static class MauiProgram
 
         app.Services
             .GetRequiredService<DatabaseInitializer>()
-            .InitializeAsync()
-            .Wait();
+            .Initialize();
 
         return app;
     }

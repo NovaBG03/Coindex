@@ -22,7 +22,8 @@ class Program
 
         Console.WriteLine($"Dropping database context");
         dbContext.Database.EnsureDeleted();
-        Console.WriteLine($"Creating database context");
-        dbContext.Database.EnsureCreated();
+        // Console.WriteLine($"Creating database context");
+        // dbContext.Database.EnsureCreated();
+        new DatabaseInitializer(dbContext).Initialize();
     }
 }
