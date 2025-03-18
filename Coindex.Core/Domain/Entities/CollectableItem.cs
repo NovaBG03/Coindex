@@ -12,5 +12,4 @@ public abstract class CollectableItem : BaseEntity
     public ItemCondition Condition { get; set; }
 
     public List<Tag> Tags { get; set; } = [];
-    public List<CollectableItemImage> Images { get; set; } = [];
 }

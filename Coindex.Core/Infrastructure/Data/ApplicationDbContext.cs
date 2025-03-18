@@ -10,7 +10,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<CollectableItem> CollectableItems { get; set; } = null!;
     public DbSet<Coin> Coins { get; set; } = null!;
     public DbSet<Bill> Bills { get; set; } = null!;
-    public DbSet<CollectableItemImage> CollectableItemImages { get; set; } = null!;
     public DbSet<Tag> Tags { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -39,16 +38,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
             collectableItem.HasMany(ci => ci.Tags)
                 .WithMany(t => t.CollectableItems);
-
-            collectableItem.HasMany(ci => ci.Images)
-                .WithOne(img => img.CollectableItem)
-                .HasForeignKey(img => img.CollectableItemId)
-                .OnDelete(DeleteBehavior.Cascade);
         });
 
         // modelBuilder.Entity<Bill>(bill => { });
         // modelBuilder.Entity<Coin>(coin => { });
-        modelBuilder.Entity<CollectableItemImage>(itemImage => { ConfigureBaseEntity(itemImage); });
 
         modelBuilder.Entity<Tag>(tag =>
         {

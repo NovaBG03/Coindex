@@ -9,6 +9,11 @@
     Title="Coindex">
 
     <ShellContent
+        Title="Collection"
+        ContentTemplate="{DataTemplate view:CollectableItemsPage}"
+        Route="CollectableItemsPage" />
+
+    <ShellContent
         Title="Coins"
         ContentTemplate="{DataTemplate view:CoinsPage}"
         Route="CoinsPage" />

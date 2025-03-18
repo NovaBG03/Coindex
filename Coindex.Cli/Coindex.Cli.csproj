@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Coindex.Core\Coindex.Core.csproj" />
+        <ProjectReference Include="..\Coindex.Core\Coindex.Core.csproj"/>
     </ItemGroup>
 
 </Project>

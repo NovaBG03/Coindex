@@ -36,11 +36,21 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<DatabaseInitializer>();
 
+        // Repositories
         builder.Services.AddScoped<ICoinRepository, CoinRepository>();
-        builder.Services.AddScoped<ICoinService, CoinService>();
+        builder.Services.AddScoped<ICollectableItemRepository, CollectableItemRepository>();
 
+        // Services
+        builder.Services.AddScoped<ICoinService, CoinService>();
+        builder.Services.AddScoped<ICollectableItemService, CollectableItemService>();
+
+        // ViewModels
         builder.Services.AddSingleton<CoinsViewModel>();
+        builder.Services.AddSingleton<CollectableItemsViewModel>();
+
+        // Pages
         builder.Services.AddSingleton<CoinsPage>();
+        builder.Services.AddSingleton<CollectableItemsPage>();
 
         builder.Services.AddSingleton<AppShell>();
 
