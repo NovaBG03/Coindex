@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using Coindex.App.ViewModels.Base;
+using Coindex.App.Views;
 using Coindex.Core.Application.Interfaces.Services;
 using Coindex.Core.Domain.Entities;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -16,6 +17,8 @@ public partial class CollectableItemsViewModel : BaseViewModel
     private bool _hasMoreItems = true;
     private bool _isLoadingMore;
 
+    [ObservableProperty] private bool _isRefreshing;
+
     private readonly ICollectableItemService _collectableItemService;
 
     public CollectableItemsViewModel(ICollectableItemService collectableItemService)
@@ -26,7 +29,14 @@ public partial class CollectableItemsViewModel : BaseViewModel
 
     public ObservableCollection<CollectableItem> Items { get; } = [];
 
-    [ObservableProperty] private bool _isRefreshing;
+    [RelayCommand]
+    private async Task ItemTapped(CollectableItem? item)
+    {
+        if (item is null) return;
+
+        await Shell.Current.GoToAsync(nameof(CollectableItemDetailsPage),
+            new Dictionary<string, object> { { "id", item.Id } });
+    }
 
     [RelayCommand]
     private async Task LoadItems()

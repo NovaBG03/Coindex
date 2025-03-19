@@ -7,4 +7,5 @@ public interface ICollectableItemService
     Task<IEnumerable<CollectableItem>> GetPagedItemsAsync(int pageNumber, int pageSize);
     Task<int> GetTotalCountAsync();
     Task<CollectableItem?> GetItemByIdAsync(int id);
+    Task<CollectableItem?> GetItemByIdWithTagsAsync(int id);
 }

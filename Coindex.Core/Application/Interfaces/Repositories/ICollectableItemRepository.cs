@@ -6,4 +6,5 @@ public interface ICollectableItemRepository : IRepository<CollectableItem>
 {
     Task<IEnumerable<CollectableItem>> GetPagedItemsAsync(int pageNumber, int pageSize);
     Task<int> GetTotalCountAsync();
+    Task<CollectableItem?> GetItemByIdWithTagsAsync(int id);
 }

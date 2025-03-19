@@ -47,10 +47,12 @@ public static class MauiProgram
         // ViewModels
         builder.Services.AddSingleton<CoinsViewModel>();
         builder.Services.AddSingleton<CollectableItemsViewModel>();
+        builder.Services.AddTransient<CollectableItemDetailsViewModel>();
 
         // Pages
         builder.Services.AddSingleton<CoinsPage>();
         builder.Services.AddSingleton<CollectableItemsPage>();
+        builder.Services.AddTransient<CollectableItemDetailsPage>();
 
         builder.Services.AddSingleton<AppShell>();
 

@@ -24,7 +24,7 @@ public class DatabaseInitializer(ApplicationDbContext context)
         {
             new() { Name = "Rare", Description = "Rare collectible items", Color = "#FF5733" },
             new() { Name = "Ancient", Description = "Ancient collectible items", Color = "#33FF57" },
-            new() { Name = "Modern", Description = "Modern collectible items", Color = "#3357FF" },
+            new() { Name = "Modern", Description = "Modern collectible items", Color = "#BBC6FA" },
             new() { Name = "Gold", Description = "Gold collectible items", Color = "#FFD700" },
             new() { Name = "Silver", Description = "Silver collectible items", Color = "#C0C0C0" }
         };

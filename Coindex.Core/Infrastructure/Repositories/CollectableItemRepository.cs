@@ -22,4 +22,10 @@ public class CollectableItemRepository(ApplicationDbContext context)
     {
         return await DbSet.CountAsync();
     }
+
+    public async Task<CollectableItem?> GetItemByIdWithTagsAsync(int id)
+    {
+        return await DbSet.Include(x => x.Tags)
+            .FirstOrDefaultAsync(x => x.Id == id);
+    }
 }

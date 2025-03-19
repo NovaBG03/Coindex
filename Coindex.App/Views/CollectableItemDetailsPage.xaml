@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:Coindex.App.ViewModels"
+             xmlns:entities="clr-namespace:Coindex.Core.Domain.Entities;assembly=Coindex.Core"
+             xmlns:converters="clr-namespace:Coindex.App.Converters"
+             x:Class="Coindex.App.Views.CollectableItemDetailsPage"
+             x:DataType="viewmodel:CollectableItemDetailsViewModel"
+             Title="{Binding Title}">
+
+    <ContentPage.Resources>
+        <converters:ItemTypeConverter x:Key="ItemTypeConverter" />
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="*">
+        <!-- Loading Indicator -->
+        <ActivityIndicator IsVisible="{Binding IsBusy}"
+                           IsRunning="{Binding IsBusy}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           HeightRequest="50"
+                           WidthRequest="50" />
+
+        <ScrollView IsVisible="{Binding IsNotBusy}">
+            <VerticalStackLayout Padding="20"
+                                 Spacing="20">
+
+                <!-- Header Section -->
+                <VerticalStackLayout Spacing="15">
+                    <Image Source="{Binding Item, Converter={StaticResource ItemTypeConverter}}"
+                           HeightRequest="200"
+                           WidthRequest="200"
+                           Aspect="AspectFit"
+                           HorizontalOptions="Center" />
+
+                    <Label Text="{Binding Item.Name}"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center" />
+
+                    <Label Text="{Binding Item.Description}"
+                           FontSize="16"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+
+                <!-- General Information -->
+                <Border BackgroundColor="{AppThemeBinding Light=WhiteSmoke, Dark={StaticResource Gray900}}"
+                        Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 8"
+                        Padding="16">
+                    <VerticalStackLayout Spacing="16">
+                        <Label Text="General Information"
+                               FontSize="18"
+                               FontAttributes="Bold" />
+
+                        <!-- Year -->
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Year"
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+                            <Label Text="{Binding Item.Year}"
+                                   FontSize="16"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+
+                        <!-- Country -->
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Country"
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+                            <Label Text="{Binding Item.Country}"
+                                   FontSize="16"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+
+                        <!-- Face Value -->
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Face Value"
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+                            <Label Text="{Binding Item.FaceValue}"
+                                   FontSize="16"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+
+                        <!-- Condition -->
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Condition"
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+                            <Label Text="{Binding Item.Condition}"
+                                   FontSize="16"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Coin Properties -->
+                <Border BackgroundColor="{AppThemeBinding Light=WhiteSmoke, Dark={StaticResource Gray900}}"
+                        Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 8"
+                        Padding="16"
+                        IsVisible="{Binding IsCoin}">
+                    <VerticalStackLayout Spacing="16">
+                        <Label Text="Coin Details"
+                               FontSize="18"
+                               FontAttributes="Bold" />
+
+                        <!-- Mint -->
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Mint"
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+                            <Label Text="{Binding Coin.Mint}"
+                                   FontSize="16"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+
+                        <!-- Material -->
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Material"
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+                            <Label Text="{Binding Coin.Material}"
+                                   FontSize="16"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+
+                        <!-- Weight -->
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Weight"
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+                            <Label Text="{Binding Coin.WeightInGrams, StringFormat='{0:F2}g'}"
+                                   FontSize="16"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+
+                        <!-- Diameter -->
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Diameter"
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+                            <Label Text="{Binding Coin.DiameterInMM, StringFormat='{0:F2}mm'}"
+                                   FontSize="16"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Bill Properties -->
+                <Border BackgroundColor="{AppThemeBinding Light=WhiteSmoke, Dark={StaticResource Gray900}}"
+                        Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 8"
+                        Padding="16"
+                        IsVisible="{Binding IsBill}">
+                    <VerticalStackLayout Spacing="16">
+                        <Label Text="Bill Details"
+                               FontSize="18"
+                               FontAttributes="Bold" />
+
+                        <!-- Series -->
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Series"
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+                            <Label Text="{Binding Bill.Series}"
+                                   FontSize="16"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+
+                        <!-- Serial Number -->
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Serial Number"
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+                            <Label Text="{Binding Bill.SerialNumber}"
+                                   FontSize="16"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+
+                        <!-- Signature Type -->
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Signature Type"
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+                            <Label Text="{Binding Bill.SignatureType}"
+                                   FontSize="16"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+
+                        <!-- Bill Type -->
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Bill Type"
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+                            <Label Text="{Binding Bill.BillType}"
+                                   FontSize="16"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+
+                        <!-- Dimensions -->
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Dimensions"
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+                            <Label FontSize="16"
+                                   LineBreakMode="WordWrap">
+                                <Label.Text>
+                                    <MultiBinding StringFormat="{}{0:F1}mm × {1:F1}mm">
+                                        <Binding Path="Bill.WidthInMM" />
+                                        <Binding Path="Bill.HeightInMM" />
+                                    </MultiBinding>
+                                </Label.Text>
+                            </Label>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Tags -->
+                <Border BackgroundColor="{AppThemeBinding Light=WhiteSmoke, Dark={StaticResource Gray900}}"
+                        Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 8"
+                        Padding="16">
+                    <VerticalStackLayout Spacing="16">
+                        <Label Text="Tags"
+                               FontSize="18"
+                               FontAttributes="Bold" />
+                        <CollectionView ItemsSource="{Binding Item.Tags}"
+                                        HeightRequest="50">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Horizontal"
+                                                   ItemSpacing="8" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="entities:Tag">
+                                    <Border BackgroundColor="{Binding Color}"
+                                            Stroke="{AppThemeBinding Light=#999999, Dark=#666666}"
+                                            StrokeThickness="0.5"
+                                            Padding="10,5"
+                                            StrokeShape="RoundRectangle 12,12,12,12">
+                                        <Label Text="{Binding Name}"
+                                               FontSize="12"
+                                               FontAttributes="Bold"
+                                               TextColor="#333333"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center" />
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Record History -->
+                <Border BackgroundColor="{AppThemeBinding Light=WhiteSmoke, Dark={StaticResource Gray900}}"
+                        Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 8"
+                        Padding="16">
+                    <VerticalStackLayout Spacing="16">
+                        <Label Text="Record History"
+                               FontSize="18"
+                               FontAttributes="Bold" />
+
+                        <!-- Created -->
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Created"
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+                            <Label Text="{Binding Item.CreatedAt, StringFormat='{0:g}'}"
+                                   FontSize="16"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+
+                        <!-- Updated -->
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Updated"
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+                            <Label Text="{Binding Item.UpdatedAt, StringFormat='{0:g}'}"
+                                   FontSize="16"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

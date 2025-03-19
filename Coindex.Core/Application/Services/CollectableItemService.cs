@@ -25,4 +25,9 @@ public class CollectableItemService(ICollectableItemRepository collectableItemRe
     {
         return await collectableItemRepository.GetByIdAsync(id);
     }
+
+    public async Task<CollectableItem?> GetItemByIdWithTagsAsync(int id)
+    {
+        return await collectableItemRepository.GetItemByIdWithTagsAsync(id);
+    }
 }

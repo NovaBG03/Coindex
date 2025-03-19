@@ -19,6 +19,7 @@
                      IsRefreshing="{Binding IsRefreshing}">
             <CollectionView
                 ItemsSource="{Binding Items}"
+                SelectionMode="None"
                 RemainingItemsThreshold="5"
                 RemainingItemsThresholdReachedCommand="{Binding LoadMoreItemsCommand}">
 
@@ -40,6 +41,12 @@
                                 StrokeThickness="1"
                                 StrokeShape="RoundRectangle 8,8,8,8"
                                 BackgroundColor="White">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    CommandParameter="{Binding .}"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:CollectableItemsViewModel}}, Path=ItemTappedCommand}" />
+                            </Border.GestureRecognizers>
+
                             <Grid RowDefinitions="Auto,Auto,Auto,Auto"
                                   ColumnDefinitions="Auto,*">
                                 <Image Grid.Row="0"
