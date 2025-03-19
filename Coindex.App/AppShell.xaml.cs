@@ -12,6 +12,7 @@ public partial class AppShell : Shell
 
     private void RegisterRoutes()
     {
-        Routing.RegisterRoute("CollectableItemDetailsPage", typeof(CollectableItemDetailsPage));
+        Routing.RegisterRoute(nameof(CollectableItemDetailsPage), typeof(CollectableItemDetailsPage));
+        Routing.RegisterRoute(nameof(CollectableItemEditPage), typeof(CollectableItemEditPage));
     }
 }

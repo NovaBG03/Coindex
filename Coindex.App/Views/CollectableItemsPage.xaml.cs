@@ -10,7 +10,7 @@ public partial class CollectableItemsPage : ContentPage
     {
         InitializeComponent();
         _viewModel = viewModel;
-        BindingContext = _viewModel;
+        BindingContext = viewModel;
     }
 
     protected override void OnAppearing()

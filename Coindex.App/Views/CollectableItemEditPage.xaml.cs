@@ -2,11 +2,11 @@ using Coindex.App.ViewModels;
 
 namespace Coindex.App.Views;
 
-public partial class CollectableItemDetailsPage : ContentPage
+public partial class CollectableItemEditPage : ContentPage
 {
-    private readonly CollectableItemDetailsViewModel _viewModel;
+    private readonly CollectableItemEditViewModel _viewModel;
 
-    public CollectableItemDetailsPage(CollectableItemDetailsViewModel viewModel)
+    public CollectableItemEditPage(CollectableItemEditViewModel viewModel)
     {
         InitializeComponent();
         _viewModel = viewModel;
@@ -16,6 +16,6 @@ public partial class CollectableItemDetailsPage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        _viewModel.LoadItemCommand.Execute(null);
+        _viewModel.InitializeCommand.Execute(null);
     }
 }

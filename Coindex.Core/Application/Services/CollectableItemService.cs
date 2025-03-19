@@ -30,4 +30,15 @@ public class CollectableItemService(ICollectableItemRepository collectableItemRe
     {
         return await collectableItemRepository.GetItemByIdWithTagsAsync(id);
     }
+
+    public async Task<int> AddItemAsync(CollectableItem item)
+    {
+        await collectableItemRepository.AddAsync(item);
+        return item.Id;
+    }
+
+    public async Task UpdateItemAsync(CollectableItem item)
+    {
+        await collectableItemRepository.UpdateAsync(item);
+    }
 }

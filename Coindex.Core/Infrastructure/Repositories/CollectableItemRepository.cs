@@ -12,6 +12,7 @@ public class CollectableItemRepository(ApplicationDbContext context)
     {
         return await DbSet
             .Include(i => i.Tags)
+            .AsNoTracking()
             .OrderByDescending(i => i.CreatedAt)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)

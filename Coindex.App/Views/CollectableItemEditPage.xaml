@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:Coindex.App.ViewModels"
+             xmlns:entities="clr-namespace:Coindex.Core.Domain.Entities;assembly=Coindex.Core"
+             xmlns:enums="clr-namespace:Coindex.Core.Domain.Enums;assembly=Coindex.Core"
+             x:Class="Coindex.App.Views.CollectableItemEditPage"
+             x:DataType="viewmodel:CollectableItemEditViewModel"
+             Title="{Binding Title}">
+
+    <Grid RowDefinitions="*">
+        <!-- Loading Indicator -->
+        <ActivityIndicator IsVisible="{Binding IsBusy}"
+                           IsRunning="{Binding IsBusy}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           HeightRequest="50"
+                           WidthRequest="50" />
+
+        <ScrollView IsVisible="{Binding IsNotBusy}">
+            <VerticalStackLayout Padding="20"
+                                 Spacing="20">
+
+                <!-- Type Selector (Only in Create Mode) -->
+                <VerticalStackLayout IsVisible="{Binding IsCreateMode}"
+                                     Spacing="5">
+                    <Label Text="Select Item Type"
+                           FontSize="16"
+                           FontAttributes="Bold" />
+                    <Picker
+                        ItemsSource="{Binding ItemTypes}"
+                        SelectedItem="{Binding SelectedItemType}" />
+
+                    <!-- Random Data Button (Only in Create Mode) -->
+                    <Button Text="Fill with random data"
+                            Command="{Binding FillRandomDataCommand}"
+                            Margin="0,10,0,0"
+                            HorizontalOptions="Start" />
+                </VerticalStackLayout>
+
+                <!-- Common Properties -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Basic Information"
+                           FontSize="16"
+                           FontAttributes="Bold" />
+
+                    <Label Text="Name" />
+                    <Entry Text="{Binding Name}"
+                           Placeholder="Enter name" />
+
+                    <Label Text="Description" />
+                    <Border Stroke="#E5E5E5"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 5"
+                            Padding="0"
+                            BackgroundColor="Transparent"
+                            Margin="0">
+                        <Editor Text="{Binding Description}"
+                                Placeholder="Enter description"
+                                HeightRequest="100"
+                                BackgroundColor="Transparent" />
+                    </Border>
+
+                    <Label Text="Year" />
+                    <Entry Text="{Binding Year}"
+                           Placeholder="Enter year"
+                           Keyboard="Numeric" />
+
+                    <Label Text="Country" />
+                    <Entry Text="{Binding Country}"
+                           Placeholder="Enter country" />
+
+                    <Label Text="Face Value" />
+                    <Entry Text="{Binding FaceValue}"
+                           Placeholder="Enter face value"
+                           Keyboard="Numeric" />
+
+                    <Label Text="Condition" />
+                    <Picker ItemsSource="{Binding Conditions}"
+                            SelectedItem="{Binding SelectedCondition}" />
+                </VerticalStackLayout>
+
+                <!-- Coin Specific Properties -->
+                <VerticalStackLayout IsVisible="{Binding IsCoin}"
+                                     Spacing="5">
+                    <Label Text="Coin Properties"
+                           FontSize="16"
+                           FontAttributes="Bold" />
+
+                    <Label Text="Mint" />
+                    <Entry Text="{Binding Mint}"
+                           Placeholder="Enter mint" />
+
+                    <Label Text="Material" />
+                    <Entry Text="{Binding Material}"
+                           Placeholder="Enter material" />
+
+                    <Label Text="Weight (in grams)" />
+                    <Entry Text="{Binding WeightInGrams}"
+                           Placeholder="Enter weight"
+                           Keyboard="Numeric" />
+
+                    <Label Text="Diameter (in mm)" />
+                    <Entry Text="{Binding DiameterInMM}"
+                           Placeholder="Enter diameter"
+                           Keyboard="Numeric" />
+                </VerticalStackLayout>
+
+                <!-- Bill Specific Properties -->
+                <VerticalStackLayout IsVisible="{Binding IsBill}"
+                                     Spacing="5">
+                    <Label Text="Bill Properties"
+                           FontSize="16"
+                           FontAttributes="Bold" />
+
+                    <Label Text="Series" />
+                    <Entry Text="{Binding Series}"
+                           Placeholder="Enter series" />
+
+                    <Label Text="Serial Number" />
+                    <Entry Text="{Binding SerialNumber}"
+                           Placeholder="Enter serial number" />
+
+                    <Label Text="Signature Type" />
+                    <Entry Text="{Binding SignatureType}"
+                           Placeholder="Enter signature type" />
+
+                    <Label Text="Bill Type" />
+                    <Entry Text="{Binding BillType}"
+                           Placeholder="Enter bill type" />
+
+                    <Label Text="Width (in mm)" />
+                    <Entry Text="{Binding WidthInMM}"
+                           Placeholder="Enter width"
+                           Keyboard="Numeric" />
+
+                    <Label Text="Height (in mm)" />
+                    <Entry Text="{Binding HeightInMM}"
+                           Placeholder="Enter height"
+                           Keyboard="Numeric" />
+                </VerticalStackLayout>
+
+                <!-- Action Buttons -->
+                <HorizontalStackLayout Spacing="10"
+                                       HorizontalOptions="End">
+                    <Button Text="Cancel"
+                            Command="{Binding CancelCommand}"
+                            BackgroundColor="LightGray"
+                            TextColor="Black" />
+                    <Button Text="Save"
+                            Command="{Binding SaveCommand}"
+                            IsEnabled="{Binding CanSave}" />
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

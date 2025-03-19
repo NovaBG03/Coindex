@@ -8,4 +8,6 @@ public interface ICollectableItemService
     Task<int> GetTotalCountAsync();
     Task<CollectableItem?> GetItemByIdAsync(int id);
     Task<CollectableItem?> GetItemByIdWithTagsAsync(int id);
+    Task<int> AddItemAsync(CollectableItem item);
+    Task UpdateItemAsync(CollectableItem item);
 }

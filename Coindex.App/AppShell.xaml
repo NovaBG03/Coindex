@@ -14,8 +14,8 @@
         Route="CollectableItemsPage" />
 
     <ShellContent
-        Title="Coins"
-        ContentTemplate="{DataTemplate view:CoinsPage}"
-        Route="CoinsPage" />
+        Title="Add new item"
+        ContentTemplate="{DataTemplate view:CollectableItemEditPage}"
+        Route="CollectableItemEditPage" />
 
 </Shell>

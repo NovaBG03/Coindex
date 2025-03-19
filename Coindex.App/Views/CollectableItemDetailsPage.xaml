@@ -9,6 +9,13 @@
              x:DataType="viewmodel:CollectableItemDetailsViewModel"
              Title="{Binding Title}">
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Edit"
+                     Command="{Binding EditItemCommand}"
+                     Order="Primary"
+                     Priority="0" />
+    </ContentPage.ToolbarItems>
+
     <ContentPage.Resources>
         <converters:ItemTypeConverter x:Key="ItemTypeConverter" />
     </ContentPage.Resources>

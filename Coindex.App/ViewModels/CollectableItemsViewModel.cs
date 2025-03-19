@@ -8,7 +8,8 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Coindex.App.ViewModels;
 
-public partial class CollectableItemsViewModel : BaseViewModel
+public partial class CollectableItemsViewModel(ICollectableItemService collectableItemService)
+    : BaseViewModel("Collection")
 {
     private const int pageSize = 10;
     private const int firstPage = 1;
@@ -19,14 +20,6 @@ public partial class CollectableItemsViewModel : BaseViewModel
 
     [ObservableProperty] private bool _isRefreshing;
 
-    private readonly ICollectableItemService _collectableItemService;
-
-    public CollectableItemsViewModel(ICollectableItemService collectableItemService)
-    {
-        _collectableItemService = collectableItemService;
-        Title = "Collection";
-    }
-
     public ObservableCollection<CollectableItem> Items { get; } = [];
 
     [RelayCommand]
@@ -36,6 +29,12 @@ public partial class CollectableItemsViewModel : BaseViewModel
 
         await Shell.Current.GoToAsync(nameof(CollectableItemDetailsPage),
             new Dictionary<string, object> { { "id", item.Id } });
+    }
+
+    [RelayCommand]
+    private async Task AddItem()
+    {
+        await Shell.Current.GoToAsync(nameof(CollectableItemEditPage));
     }
 
     [RelayCommand]
@@ -51,14 +50,14 @@ public partial class CollectableItemsViewModel : BaseViewModel
             _hasMoreItems = true;
 
             Items.Clear();
-            var items = await _collectableItemService.GetPagedItemsAsync(_currentPage, pageSize);
+            var items = await collectableItemService.GetPagedItemsAsync(_currentPage, pageSize);
             foreach (var item in items)
             {
                 Items.Add(item);
             }
 
             // Check if we have more items
-            var totalCount = await _collectableItemService.GetTotalCountAsync();
+            var totalCount = await collectableItemService.GetTotalCountAsync();
             _hasMoreItems = Items.Count < totalCount;
         }
         catch (Exception ex)
@@ -81,7 +80,7 @@ public partial class CollectableItemsViewModel : BaseViewModel
         try
         {
             _currentPage++;
-            var items = await _collectableItemService.GetPagedItemsAsync(_currentPage, pageSize);
+            var items = await collectableItemService.GetPagedItemsAsync(_currentPage, pageSize);
             var newItems = items.ToList();
 
             if (newItems.Count == 0)
@@ -96,7 +95,7 @@ public partial class CollectableItemsViewModel : BaseViewModel
             }
 
             // Check if we have more items
-            var totalCount = await _collectableItemService.GetTotalCountAsync();
+            var totalCount = await collectableItemService.GetTotalCountAsync();
             _hasMoreItems = Items.Count < totalCount;
         }
         catch (Exception ex)

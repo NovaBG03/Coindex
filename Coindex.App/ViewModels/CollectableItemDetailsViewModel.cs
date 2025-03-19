@@ -1,4 +1,5 @@
 using Coindex.App.ViewModels.Base;
+using Coindex.App.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Coindex.Core.Application.Interfaces.Services;
 using Coindex.Core.Domain.Entities;
@@ -7,10 +8,9 @@ using CommunityToolkit.Mvvm.Input;
 namespace Coindex.App.ViewModels;
 
 [QueryProperty(nameof(ItemId), "id")]
-public partial class CollectableItemDetailsViewModel : BaseViewModel
+public partial class CollectableItemDetailsViewModel(ICollectableItemService collectableItemService)
+    : BaseViewModel("Item Details")
 {
-    private readonly ICollectableItemService _collectableItemService;
-
     [ObservableProperty] private CollectableItem? _item;
     [ObservableProperty] private int _itemId;
 
@@ -18,12 +18,6 @@ public partial class CollectableItemDetailsViewModel : BaseViewModel
     public bool IsBill => Item is Bill;
     public Coin? Coin => Item as Coin;
     public Bill? Bill => Item as Bill;
-
-    public CollectableItemDetailsViewModel(ICollectableItemService collectableItemService)
-    {
-        _collectableItemService = collectableItemService;
-        Title = "Item Details";
-    }
 
     partial void OnItemIdChanged(int value)
     {
@@ -50,8 +44,9 @@ public partial class CollectableItemDetailsViewModel : BaseViewModel
         try
         {
             IsBusy = true;
+            Item = null;
 
-            var item = await _collectableItemService.GetItemByIdWithTagsAsync(ItemId);
+            var item = await collectableItemService.GetItemByIdWithTagsAsync(ItemId);
             if (item is null)
             {
                 await Shell.Current.DisplayAlert("Error", "Item not found", "OK");
@@ -70,5 +65,14 @@ public partial class CollectableItemDetailsViewModel : BaseViewModel
         {
             IsBusy = false;
         }
+    }
+
+    [RelayCommand]
+    private async Task EditItem()
+    {
+        if (Item is null) return;
+
+        await Shell.Current.GoToAsync(nameof(CollectableItemEditPage),
+            new Dictionary<string, object> { { "id", ItemId } });
     }
 }

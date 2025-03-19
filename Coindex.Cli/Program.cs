@@ -1,4 +1,5 @@
-﻿using Coindex.Core.Infrastructure.Data;
+﻿using Coindex.Core.Application.Services;
+using Coindex.Core.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Coindex.Cli;
@@ -24,6 +25,6 @@ class Program
         dbContext.Database.EnsureDeleted();
         // Console.WriteLine($"Creating database context");
         // dbContext.Database.EnsureCreated();
-        new DatabaseInitializer(dbContext).Initialize();
+        new DatabaseInitializer(dbContext, new CollectableItemDataGeneratorService(1234)).Initialize();
     }
 }

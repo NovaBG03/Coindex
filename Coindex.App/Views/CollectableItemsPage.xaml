@@ -129,5 +129,17 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </RefreshView>
+
+        <!-- Add Button (Floating) -->
+        <Button Text="+"
+                FontSize="24"
+                FontAttributes="Bold"
+                WidthRequest="60"
+                HeightRequest="60"
+                CornerRadius="30"
+                HorizontalOptions="End"
+                VerticalOptions="End"
+                Margin="0,0,25,25"
+                Command="{Binding AddItemCommand}" />
     </Grid>
 </ContentPage>
