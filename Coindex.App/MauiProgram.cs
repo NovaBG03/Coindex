@@ -48,11 +48,13 @@ public static class MauiProgram
         //     new CollectableItemDataGeneratorService(1234));
 
         // ViewModels
+        builder.Services.AddSingleton<TagsViewModel>();
         builder.Services.AddSingleton<CollectableItemsViewModel>();
         builder.Services.AddTransient<CollectableItemDetailsViewModel>();
         builder.Services.AddTransient<CollectableItemEditViewModel>();
 
         // Pages
+        builder.Services.AddSingleton<TagsPage>();
         builder.Services.AddSingleton<CollectableItemsPage>();
         builder.Services.AddTransient<CollectableItemDetailsPage>();
         builder.Services.AddTransient<CollectableItemEditPage>();

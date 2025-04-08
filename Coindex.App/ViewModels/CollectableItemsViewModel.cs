@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Coindex.App.ViewModels;
 
+[QueryProperty(nameof(PreSelectedTagName), "tagName")]
 public partial class CollectableItemsViewModel : BaseViewModel
 {
     private const string tagNameAll = "All tags";
@@ -35,6 +36,8 @@ public partial class CollectableItemsViewModel : BaseViewModel
     [ObservableProperty] private string _itemNameInputFilter = string.Empty;
     [ObservableProperty] private string _tagNameInputFilter = tagNameAll;
     [ObservableProperty] private string _conditionNameInputFilter = conditionNameAll;
+
+    [ObservableProperty] private string _preSelectedTagName = string.Empty;
 
     public CollectableItemsViewModel(ICollectableItemService collectableItemService, ITagService tagService) :
         base("Collection")
@@ -74,7 +77,8 @@ public partial class CollectableItemsViewModel : BaseViewModel
                 _tagsByNameDictionary[t.Name] = t;
                 TagNames.Add(t.Name);
             });
-            TagNameInputFilter = tagNameAll;
+
+            TagNameInputFilter = string.IsNullOrEmpty(PreSelectedTagName) ? tagNameAll : PreSelectedTagName;
 
             _conditionsByNameDictionary.Clear();
             ConditionNames.Clear();
@@ -111,6 +115,14 @@ public partial class CollectableItemsViewModel : BaseViewModel
     partial void OnConditionNameInputFilterChanged(string value)
     {
         OnFilterChanged();
+    }
+
+    partial void OnPreSelectedTagNameChanged(string value)
+    {
+        if (!string.IsNullOrEmpty(value) && value != tagNameAll)
+        {
+            TagNameInputFilter = value;
+        }
     }
 
     [RelayCommand]

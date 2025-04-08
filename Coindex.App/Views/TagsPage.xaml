@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:Coindex.App.ViewModels"
+             xmlns:entities="clr-namespace:Coindex.Core.Domain.Entities;assembly=Coindex.Core"
+             x:Class="Coindex.App.Views.TagsPage"
+             x:DataType="viewmodel:TagsViewModel"
+             Title="{Binding Title}">
+
+    <Grid RowDefinitions="*">
+        <!-- Loading Indicator -->
+        <ActivityIndicator IsVisible="{Binding IsBusy}"
+                           IsRunning="{Binding IsBusy}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           HeightRequest="50"
+                           WidthRequest="50" />
+
+        <!-- Tags grid view -->
+        <RefreshView Grid.Row="0"
+                     IsEnabled="{Binding IsNotBusy}"
+                     IsVisible="{Binding IsNotBusy}"
+                     Command="{Binding InitializeCommand}">
+            <CollectionView ItemsSource="{Binding Tags}"
+                            SelectionMode="None">
+                <CollectionView.EmptyView>
+                    <StackLayout HorizontalOptions="Center"
+                                 VerticalOptions="Center">
+                        <Label Text="No tags available"
+                               FontSize="Medium" />
+                        <Label Text="Tags will appear here once added to items"
+                               FontSize="Small" />
+                    </StackLayout>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical"
+                                     Span="3"
+                                     VerticalItemSpacing="10"
+                                     HorizontalItemSpacing="10" />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="entities:Tag">
+                        <Border Stroke="{Binding Color}"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 8"
+                                BackgroundColor="{Binding Color}"
+                                Padding="10"
+                                Margin="5"
+                                WidthRequest="100"
+                                HeightRequest="100">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:TagsViewModel}}, Path=TagSelectedCommand}"
+                                    CommandParameter="{Binding Name}" />
+                            </Border.GestureRecognizers>
+                            <VerticalStackLayout HorizontalOptions="Center"
+                                                 VerticalOptions="Center">
+                                <Label Text="{Binding Name}"
+                                       TextColor="Black"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       HorizontalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </Grid>
+</ContentPage>

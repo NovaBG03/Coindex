@@ -9,6 +9,11 @@
     Title="Coindex">
 
     <ShellContent
+        Title="All Collections"
+        ContentTemplate="{DataTemplate view:TagsPage}"
+        Route="TagsPage" />
+
+    <ShellContent
         Title="Collection"
         ContentTemplate="{DataTemplate view:CollectableItemsPage}"
         Route="CollectableItemsPage" />
