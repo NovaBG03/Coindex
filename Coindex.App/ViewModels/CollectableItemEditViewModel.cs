@@ -5,13 +5,15 @@ using Coindex.Core.Domain.Entities;
 using Coindex.Core.Domain.Enums;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.Collections.ObjectModel;
 
 namespace Coindex.App.ViewModels;
 
 [QueryProperty(nameof(ItemId), "id")]
 public partial class CollectableItemEditViewModel(
     ICollectableItemService collectableItemService,
-    ICollectableItemDataGeneratorService dataGenerator)
+    ICollectableItemDataGeneratorService dataGenerator,
+    ITagService tagService)
     : BaseViewModel("Item Editor")
 {
     // Mode tracking
@@ -55,6 +57,19 @@ public partial class CollectableItemEditViewModel(
     [ObservableProperty] private string _widthInMM = "0";
     [ObservableProperty] private string _heightInMM = "0";
 
+    // Tag properties
+    [ObservableProperty] private string _tagInput = "";
+    [ObservableProperty] private ObservableCollection<Tag> _selectedTags = [];
+    [ObservableProperty] private ObservableCollection<Tag> _availableTags = [];
+    [ObservableProperty] private ObservableCollection<Tag> _filteredTags = [];
+
+    // Random colors for new tags
+    private static readonly string[] TagColors =
+    {
+        "#FF5733", "#33FF57", "#3357FF", "#F033FF", "#FF33F0",
+        "#33FFF0", "#F0FF33", "#5733FF", "#FF5733", "#33FF57"
+    };
+
     [RelayCommand]
     private async Task Initialize()
     {
@@ -63,6 +78,8 @@ public partial class CollectableItemEditViewModel(
         try
         {
             IsBusy = true;
+            await LoadAllTags();
+
             if (IsCreateMode)
             {
                 Title = "Create New Item";
@@ -72,6 +89,8 @@ public partial class CollectableItemEditViewModel(
                 Title = "Edit Item";
                 await LoadItem();
             }
+
+            FilterAvailableTags();
         }
         catch (Exception ex)
         {
@@ -82,6 +101,84 @@ public partial class CollectableItemEditViewModel(
         {
             IsBusy = false;
         }
+    }
+
+    private async Task LoadAllTags()
+    {
+        var tags = await tagService.GetAllTagsAsync();
+        AvailableTags = new ObservableCollection<Tag>(tags);
+        FilterAvailableTags();
+    }
+
+    partial void OnTagInputChanged(string value)
+    {
+        FilterAvailableTags();
+    }
+
+    private void FilterAvailableTags()
+    {
+        var filtered = AvailableTags
+            .Where(t => SelectedTags.All(st => st.Id != t.Id))
+            .Where(t => string.IsNullOrWhiteSpace(TagInput) ||
+                        t.Name.Contains(TagInput, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+
+        FilteredTags = new ObservableCollection<Tag>(filtered);
+    }
+
+    [RelayCommand]
+    private void AddTag(Tag tag)
+    {
+        if (SelectedTags.All(t => t.Id != tag.Id))
+        {
+            SelectedTags.Add(tag);
+            FilterAvailableTags();
+        }
+    }
+
+    [RelayCommand]
+    private void RemoveTag(Tag tag)
+    {
+        if (SelectedTags.FirstOrDefault(t => t.Id == tag.Id) is { } tagToRemove)
+        {
+            SelectedTags.Remove(tagToRemove);
+            FilterAvailableTags();
+        }
+    }
+
+    [RelayCommand]
+    private void CreateTag()
+    {
+        if (string.IsNullOrWhiteSpace(TagInput)) return;
+
+        // Check if tag with this name already exists
+        var existingTag = AvailableTags.FirstOrDefault(t =>
+            t.Name.Equals(TagInput, StringComparison.OrdinalIgnoreCase));
+
+        if (existingTag is null)
+        {
+            var newTag = new Tag
+            {
+                Name = TagInput,
+                Description = "",
+                Color = GetColorForTag(TagInput)
+            };
+
+            AvailableTags.Add(newTag);
+            SelectedTags.Add(newTag);
+            FilterAvailableTags();
+        }
+        else
+        {
+            AddTag(existingTag);
+        }
+
+        TagInput = "";
+    }
+
+    private static string GetColorForTag(string tagName)
+    {
+        return TagColors[Math.Abs(tagName.GetHashCode()) % TagColors.Length];
     }
 
     [RelayCommand]
@@ -141,7 +238,8 @@ public partial class CollectableItemEditViewModel(
                 bill.HeightInMM = ParseDecimal(HeightInMM);
             }
 
-            // Save the item to the database
+            item.Tags = SelectedTags.ToList();
+
             if (IsCreateMode)
             {
                 await collectableItemService.AddItemAsync(item);
@@ -179,6 +277,9 @@ public partial class CollectableItemEditViewModel(
         Country = item.Country;
         FaceValue = item.FaceValue.ToString(CultureInfo.InvariantCulture);
         SelectedCondition = item.Condition;
+
+        SelectedTags = new ObservableCollection<Tag>(item.Tags);
+        FilterAvailableTags();
 
         switch (item)
         {
