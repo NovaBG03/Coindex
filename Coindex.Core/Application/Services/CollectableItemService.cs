@@ -1,6 +1,7 @@
 using Coindex.Core.Application.Interfaces.Repositories;
 using Coindex.Core.Application.Interfaces.Services;
 using Coindex.Core.Domain.Entities;
+using Coindex.Core.Domain.Filters;
 
 namespace Coindex.Core.Application.Services;
 
@@ -11,14 +12,15 @@ public class CollectableItemService(ICollectableItemRepository collectableItemRe
         return await collectableItemRepository.GetAllAsync();
     }
 
-    public async Task<IEnumerable<CollectableItem>> GetPagedItemsAsync(int pageNumber, int pageSize)
+    public async Task<IEnumerable<CollectableItem>> GetPagedItemsAsync(int pageNumber, int pageSize,
+        CollectableItemFilter? filter = null)
     {
-        return await collectableItemRepository.GetPagedItemsAsync(pageNumber, pageSize);
+        return await collectableItemRepository.GetPagedItemsAsync(pageNumber, pageSize, filter);
     }
 
-    public async Task<int> GetTotalCountAsync()
+    public async Task<int> GetTotalCountAsync(CollectableItemFilter? filter = null)
     {
-        return await collectableItemRepository.GetTotalCountAsync();
+        return await collectableItemRepository.GetTotalCountAsync(filter);
     }
 
     public async Task<CollectableItem?> GetItemByIdAsync(int id)

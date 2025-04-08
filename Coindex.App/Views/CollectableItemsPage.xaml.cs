@@ -16,6 +16,6 @@ public partial class CollectableItemsPage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        _viewModel.LoadItemsCommand.Execute(null);
+        _viewModel.InitializeCommand.Execute(null);
     }
 }

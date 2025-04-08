@@ -38,9 +38,11 @@ public static class MauiProgram
 
         // Repositories
         builder.Services.AddScoped<ICollectableItemRepository, CollectableItemRepository>();
+        builder.Services.AddScoped<ITagRepository, TagRepository>();
 
         // Services
         builder.Services.AddScoped<ICollectableItemService, CollectableItemService>();
+        builder.Services.AddScoped<ITagService, TagService>();
         builder.Services.AddSingleton<ICollectableItemDataGeneratorService, CollectableItemDataGeneratorService>();
         // builder.Services.AddSingleton<ICollectableItemDataGeneratorService>(
         //     new CollectableItemDataGeneratorService(1234));

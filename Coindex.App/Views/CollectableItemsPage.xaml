@@ -10,11 +10,50 @@
              Title="{Binding Title}">
 
     <ContentPage.Resources>
-        <converters:ItemTypeConverter x:Key="ItemTypeConverter" />
+        <converters:ItemTypeConverter x:Key="ItemTypeConverter"/>
     </ContentPage.Resources>
 
-    <Grid RowDefinitions="*">
-        <RefreshView Grid.Row="0"
+    <Grid RowDefinitions="Auto,*">
+        <!-- Filters section -->
+        <Border Grid.Row="0"
+                Margin="10"
+                Padding="10"
+                Stroke="LightGray"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 8,8,8,8">
+            <VerticalStackLayout Spacing="10">
+                <Grid ColumnDefinitions="*,Auto">
+                    <Entry Grid.Column="0"
+                           Placeholder="Search by name"
+                           Text="{Binding ItemNameInputFilter}"/>
+                    <Button Grid.Column="1"
+                            Text="Clear Filters"
+                            Command="{Binding ClearFiltersCommand}"
+                            WidthRequest="120"/>
+                </Grid>
+
+                <Grid ColumnDefinitions="*,*">
+                    <VerticalStackLayout Grid.Column="0"
+                                         Spacing="5">
+                        <Label Text="Filter by Tag:"
+                               FontSize="Small"/>
+                        <Picker ItemsSource="{Binding TagNames}"
+                                SelectedItem="{Binding TagNameInputFilter}"/>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Grid.Column="1"
+                                         Spacing="5">
+                        <Label Text="Filter by Condition:"
+                               FontSize="Small"/>
+                        <Picker ItemsSource="{Binding ConditionNames}"
+                                SelectedItem="{Binding ConditionNameInputFilter}"/>
+                    </VerticalStackLayout>
+                </Grid>
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Items list -->
+        <RefreshView Grid.Row="1"
                      Command="{Binding RefreshCommand}"
                      IsRefreshing="{Binding IsRefreshing}">
             <CollectionView
@@ -27,9 +66,9 @@
                     <StackLayout HorizontalOptions="Center"
                                  VerticalOptions="Center">
                         <Label Text="No items in your collection"
-                               FontSize="Medium" />
+                               FontSize="Medium"/>
                         <Label Text="Items will appear here once added"
-                               FontSize="Small" />
+                               FontSize="Small"/>
                     </StackLayout>
                 </CollectionView.EmptyView>
 
@@ -44,7 +83,7 @@
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer
                                     CommandParameter="{Binding .}"
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:CollectableItemsViewModel}}, Path=ItemTappedCommand}" />
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:CollectableItemsViewModel}}, Path=ItemTappedCommand}"/>
                             </Border.GestureRecognizers>
 
                             <Grid RowDefinitions="Auto,Auto,Auto,Auto"
@@ -63,14 +102,14 @@
                                        Grid.Column="1"
                                        Text="{Binding Name}"
                                        FontAttributes="Bold"
-                                       FontSize="Medium" />
+                                       FontSize="Medium"/>
 
                                 <Label Grid.Row="1"
                                        Grid.Column="1"
                                        Text="{Binding Description}"
                                        FontSize="Small"
                                        LineBreakMode="TailTruncation"
-                                       MaxLines="2" />
+                                       MaxLines="2"/>
 
                                 <FlexLayout Grid.Row="2"
                                             Grid.Column="1"
@@ -82,19 +121,19 @@
 
                                     <Label Text="{Binding Year, StringFormat='Year: {0}'}"
                                            Margin="0,0,10,0"
-                                           FontSize="Micro" />
+                                           FontSize="Micro"/>
 
                                     <Label Text="{Binding Country, StringFormat='Country: {0}'}"
                                            Margin="0,0,10,0"
-                                           FontSize="Micro" />
+                                           FontSize="Micro"/>
 
                                     <Label Text="{Binding FaceValue, StringFormat='Value: {0}'}"
                                            Margin="0,0,10,0"
-                                           FontSize="Micro" />
+                                           FontSize="Micro"/>
 
                                     <Label Text="{Binding Condition, StringFormat='Condition: {0}'}"
                                            Margin="0,0,10,0"
-                                           FontSize="Micro" />
+                                           FontSize="Micro"/>
                                 </FlexLayout>
 
                                 <CollectionView Grid.Row="3"
@@ -104,7 +143,7 @@
                                                 HeightRequest="30">
                                     <CollectionView.ItemsLayout>
                                         <LinearItemsLayout Orientation="Horizontal"
-                                                           ItemSpacing="5" />
+                                                           ItemSpacing="5"/>
                                     </CollectionView.ItemsLayout>
                                     <CollectionView.ItemTemplate>
                                         <DataTemplate x:DataType="entities:Tag">
@@ -118,7 +157,7 @@
                                                        FontAttributes="Bold"
                                                        TextColor="#333333"
                                                        HorizontalOptions="Center"
-                                                       VerticalOptions="Center" />
+                                                       VerticalOptions="Center"/>
                                             </Border>
                                         </DataTemplate>
                                     </CollectionView.ItemTemplate>
@@ -132,6 +171,7 @@
 
         <!-- Add Button (Floating) -->
         <Button Text="+"
+                Grid.Row="1"
                 FontSize="24"
                 FontAttributes="Bold"
                 WidthRequest="60"
@@ -140,6 +180,6 @@
                 HorizontalOptions="End"
                 VerticalOptions="End"
                 Margin="0,0,25,25"
-                Command="{Binding AddItemCommand}" />
+                Command="{Binding AddItemCommand}"/>
     </Grid>
 </ContentPage>
