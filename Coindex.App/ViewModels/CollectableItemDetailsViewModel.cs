@@ -1,8 +1,8 @@
 using Coindex.App.ViewModels.Base;
 using Coindex.App.Views;
-using CommunityToolkit.Mvvm.ComponentModel;
 using Coindex.Core.Application.Interfaces.Services;
 using Coindex.Core.Domain.Entities;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 namespace Coindex.App.ViewModels;

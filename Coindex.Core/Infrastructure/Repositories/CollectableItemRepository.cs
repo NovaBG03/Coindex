@@ -14,10 +14,7 @@ public class CollectableItemRepository(ApplicationDbContext context)
     {
         var query = DbSet.Include(i => i.Tags).AsNoTracking();
 
-        if (filter is not null)
-        {
-            query = ApplyFilter(query, filter);
-        }
+        if (filter is not null) query = ApplyFilter(query, filter);
 
         return await query
             .OrderByDescending(i => i.CreatedAt)
@@ -30,10 +27,7 @@ public class CollectableItemRepository(ApplicationDbContext context)
     {
         var query = DbSet.AsQueryable();
 
-        if (filter is not null)
-        {
-            query = ApplyFilter(query, filter);
-        }
+        if (filter is not null) query = ApplyFilter(query, filter);
 
         return await query.CountAsync();
     }
@@ -47,20 +41,11 @@ public class CollectableItemRepository(ApplicationDbContext context)
     private static IQueryable<CollectableItem> ApplyFilter(IQueryable<CollectableItem> query,
         CollectableItemFilter filter)
     {
-        if (!string.IsNullOrWhiteSpace(filter.Name))
-        {
-            query = query.Where(i => i.Name.Contains(filter.Name));
-        }
+        if (!string.IsNullOrWhiteSpace(filter.Name)) query = query.Where(i => i.Name.Contains(filter.Name));
 
-        if (filter.TagId.HasValue)
-        {
-            query = query.Where(i => i.Tags.Any(t => t.Id == filter.TagId.Value));
-        }
+        if (filter.TagId.HasValue) query = query.Where(i => i.Tags.Any(t => t.Id == filter.TagId.Value));
 
-        if (filter.Condition.HasValue)
-        {
-            query = query.Where(i => i.Condition == filter.Condition.Value);
-        }
+        if (filter.Condition.HasValue) query = query.Where(i => i.Condition == filter.Condition.Value);
 
         return query;
     }

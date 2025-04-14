@@ -1,6 +1,7 @@
 # Coindex CLI
 
-A simple command-line interface for querying the Coindex collectables database. This CLI provides an easy way to access the same database used by the Coindex app, demonstrating code sharing between the app and CLI.
+A simple command-line interface for querying the Coindex collectables database. This CLI provides an easy way to access
+the same database used by the Coindex app, demonstrating code sharing between the app and CLI.
 
 ## Usage
 

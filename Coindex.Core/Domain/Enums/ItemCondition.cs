@@ -11,5 +11,5 @@ public enum ItemCondition
     ExtremelyFine,
     AboutUncirculated,
     Uncirculated,
-    BrilliantUncirculated,
+    BrilliantUncirculated
 }

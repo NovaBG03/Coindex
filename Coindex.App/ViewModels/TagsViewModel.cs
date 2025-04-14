@@ -24,7 +24,8 @@ public partial class TagsViewModel(ITagService tagService) : BaseViewModel("All 
             Tags.Clear();
 
             var allTags = await tagService.GetAllTagsAsync();
-            if (ShouldAddTagForAllNavigation) Tags.Add(new Tag { Name = allTagName, Color = "#ff00ff" });
+            // "#ff00ff"
+            if (ShouldAddTagForAllNavigation) Tags.Add(new Tag { Name = allTagName, Color = "#000000" });
             foreach (var tag in allTags) Tags.Add(tag);
         }
         catch (Exception ex)

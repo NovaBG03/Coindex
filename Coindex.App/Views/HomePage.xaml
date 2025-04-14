@@ -4,9 +4,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodel="clr-namespace:Coindex.App.ViewModels"
              xmlns:entities="clr-namespace:Coindex.Core.Domain.Entities;assembly=Coindex.Core"
+             xmlns:converters="clr-namespace:Coindex.App.Converters"
              x:Class="Coindex.App.Views.HomePage"
              x:DataType="viewmodel:TagsViewModel"
              Title="{Binding Title}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BackgroundColorToTextColorConverter x:Key="BackgroundColorToTextColorConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <RefreshView Command="{Binding InitializeCommand}"
                  IsRefreshing="{Binding IsBusy}">
@@ -79,12 +86,12 @@
                                                          VerticalOptions="Center"
                                                          Spacing="8">
                                         <Label Text="{Binding Name}"
-                                               TextColor="Black"
+                                               TextColor="{Binding Path=BindingContext.Color, Source={RelativeSource AncestorType={x:Type Border}}, Converter={StaticResource BackgroundColorToTextColorConverter}}"
                                                FontSize="20"
                                                FontAttributes="Bold"
                                                HorizontalOptions="Center" />
                                         <Label Text="Tap to view"
-                                               TextColor="Black"
+                                               TextColor="{Binding Path=BindingContext.Color, Source={RelativeSource AncestorType={x:Type Border}}, Converter={StaticResource BackgroundColorToTextColorConverter}}"
                                                Opacity="0.7"
                                                FontSize="14"
                                                HorizontalOptions="Center" />

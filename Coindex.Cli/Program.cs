@@ -8,6 +8,7 @@ using Coindex.Core.Infrastructure.Data;
 using Coindex.Core.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using SQLitePCL;
 
 namespace Coindex.Cli;
 
@@ -19,7 +20,6 @@ internal abstract class Program
         var remainingArgs = new List<string>();
 
         for (var i = 0; i < args.Length; i++)
-        {
             if ((args[i] == "--db" || args[i] == "--database") && i + 1 < args.Length)
             {
                 customDbPath = args[i + 1];
@@ -29,7 +29,6 @@ internal abstract class Program
             {
                 remainingArgs.Add(args[i]);
             }
-        }
 
         var dbPath = customDbPath ?? Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
@@ -82,7 +81,7 @@ internal abstract class Program
         Console.WriteLine($"Using database at: {dbPath}");
 
         // Initialize SQLite
-        SQLitePCL.Batteries_V2.Init();
+        Batteries_V2.Init();
 
         // Database
         services.AddDbContext<ApplicationDbContext>(options =>
@@ -109,7 +108,6 @@ internal abstract class Program
         {
             // Try to connect to validate schema
             if (dbContext.Database.CanConnect())
-            {
                 // Verify schema by executing a simple query
                 try
                 {
@@ -125,7 +123,6 @@ internal abstract class Program
                     // Delete existing database
                     dbContext.Database.EnsureDeleted();
                 }
-            }
 
             // Create and initialize the database
             Console.WriteLine("Creating database and seeding data...");
@@ -197,20 +194,16 @@ internal abstract class Program
         var tagService = serviceProvider.GetRequiredService<ITagService>();
 
         // Parse arguments
-        int pageNumber = 1;
+        var pageNumber = 1;
         string? tagName = null;
         ItemCondition? condition = null;
 
         for (var i = 0; i < args.Length; i++)
-        {
             switch (args[i])
             {
                 case "--page" when i + 1 < args.Length:
                 {
-                    if (int.TryParse(args[i + 1], out int page))
-                    {
-                        pageNumber = page;
-                    }
+                    if (int.TryParse(args[i + 1], out var page)) pageNumber = page;
 
                     i++;
                     break;
@@ -222,15 +215,12 @@ internal abstract class Program
                 case "--condition" when i + 1 < args.Length:
                 {
                     if (Enum.TryParse<ItemCondition>(args[i + 1], true, out var parsedCondition))
-                    {
                         condition = parsedCondition;
-                    }
 
                     i++;
                     break;
                 }
             }
-        }
 
         // Build filter
         var filter = new CollectableItemFilter();
@@ -289,7 +279,7 @@ internal abstract class Program
             return;
         }
 
-        if (!int.TryParse(args[0], out int id))
+        if (!int.TryParse(args[0], out var id))
         {
             Console.WriteLine("Invalid ID format. Please provide a number.");
             return;
@@ -313,7 +303,9 @@ internal abstract class Program
         Console.WriteLine($"Face Value: {item.FaceValue}");
         Console.WriteLine($"Condition: {item.Condition}");
 
-        Console.WriteLine(item.Tags.Count != 0 ? $"Tags: {string.Join(", ", item.Tags.Select(t => t.Name))}" : "Tags: None");
+        Console.WriteLine(item.Tags.Count != 0
+            ? $"Tags: {string.Join(", ", item.Tags.Select(t => t.Name))}"
+            : "Tags: None");
 
         switch (item)
         {
@@ -350,10 +342,8 @@ internal abstract class Program
         Console.WriteLine(new string('-', 50));
 
         foreach (var tag in tags)
-        {
             Console.WriteLine(
                 $"{tag.Id,-5} {TruncateString(tag.Name, 20),-20} {TruncateString(tag.Description, 25),-25}");
-        }
     }
 
     private static async Task SearchCollectables(ServiceProvider serviceProvider, string[] args)
@@ -396,9 +386,9 @@ internal abstract class Program
         var tags = await tagService.GetAllTagsAsync();
 
         var collectableItems = allItems.ToList();
-        int totalItems = collectableItems.Count;
-        int coinCount = collectableItems.Count(i => i is Coin);
-        int billCount = collectableItems.Count(i => i is Bill);
+        var totalItems = collectableItems.Count;
+        var coinCount = collectableItems.Count(i => i is Coin);
+        var billCount = collectableItems.Count(i => i is Bill);
 
         var countries = collectableItems.Select(i => i.Country).Distinct().ToList();
         var years = collectableItems.Select(i => i.Year).Distinct().OrderBy(y => y).ToList();
@@ -427,10 +417,7 @@ internal abstract class Program
             .OrderByDescending(x => x.Count)
             .Take(5);
 
-        foreach (var country in topCountries)
-        {
-            Console.WriteLine($"  {country.Country}: {country.Count} item(s)");
-        }
+        foreach (var country in topCountries) Console.WriteLine($"  {country.Country}: {country.Count} item(s)");
     }
 
     private static string TruncateString(string str, int maxLength)

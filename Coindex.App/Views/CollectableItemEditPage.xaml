@@ -4,10 +4,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodel="clr-namespace:Coindex.App.ViewModels"
              xmlns:entities="clr-namespace:Coindex.Core.Domain.Entities;assembly=Coindex.Core"
-             xmlns:enums="clr-namespace:Coindex.Core.Domain.Enums;assembly=Coindex.Core"
+             xmlns:converters="clr-namespace:Coindex.App.Converters"
              x:Class="Coindex.App.Views.CollectableItemEditPage"
              x:DataType="viewmodel:CollectableItemEditViewModel"
              Title="{Binding Title}">
+
+    <ContentPage.Resources>
+        <converters:BackgroundColorToTextColorConverter x:Key="BgToFgConverter" />
+    </ContentPage.Resources>
 
     <Grid RowDefinitions="*">
         <!-- Loading Indicator -->
@@ -162,12 +166,13 @@
                                         StrokeThickness="1"
                                         StrokeShape="RoundRectangle 12"
                                         BackgroundColor="{Binding Color}"
+                                        x:Name="SelectedTagBorder"
                                         Margin="2">
                                     <Grid ColumnDefinitions="Auto,Auto"
                                           Padding="8,4">
                                         <Label Grid.Column="0"
                                                Text="{Binding Name}"
-                                               TextColor="Black"
+                                               TextColor="{Binding Source={x:Reference SelectedTagBorder}, Path=BackgroundColor, Converter={StaticResource BgToFgConverter}}"
                                                FontSize="12"
                                                VerticalOptions="Center" />
                                         <Button Grid.Column="1"
@@ -176,7 +181,7 @@
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:CollectableItemEditViewModel}}, Path=RemoveTagCommand}"
                                                 CommandParameter="{Binding}"
                                                 BackgroundColor="Transparent"
-                                                TextColor="Black"
+                                                TextColor="{Binding Source={x:Reference SelectedTagBorder}, Path=BackgroundColor, Converter={StaticResource BgToFgConverter}}"
                                                 Padding="2"
                                                 Margin="2,0,0,0"
                                                 VerticalOptions="Center"
@@ -214,14 +219,15 @@
                                 <Border Stroke="{Binding Color}"
                                         StrokeThickness="1"
                                         StrokeShape="RoundRectangle 12"
-                                        BackgroundColor="{Binding Color}">
+                                        BackgroundColor="{Binding Color}"
+                                        x:Name="AvailableTagBorder">
                                     <Border.GestureRecognizers>
                                         <TapGestureRecognizer
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:CollectableItemEditViewModel}}, Path=AddTagCommand}"
                                             CommandParameter="{Binding}" />
                                     </Border.GestureRecognizers>
                                     <Label Text="{Binding Name}"
-                                           TextColor="Black"
+                                           TextColor="{Binding Source={x:Reference AvailableTagBorder}, Path=BackgroundColor, Converter={StaticResource BgToFgConverter}}"
                                            FontSize="12"
                                            Padding="10,5" />
                                 </Border>

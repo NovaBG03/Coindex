@@ -6,8 +6,6 @@ namespace Coindex.Core.Application.Services;
 
 public class CollectableItemDataGeneratorService(int? seed = null) : ICollectableItemDataGeneratorService
 {
-    private readonly Random _random = seed.HasValue ? new Random(seed.Value) : new Random();
-
     private static readonly string[] Countries =
     [
         "United States", "Canada", "United Kingdom", "Germany", "France", "Japan", "Australia",
@@ -37,6 +35,8 @@ public class CollectableItemDataGeneratorService(int? seed = null) : ICollectabl
         "Federal Reserve Note", "Treasury Note", "Silver Certificate",
         "Gold Certificate", "National Bank Note", "National Currency"
     ];
+
+    private readonly Random _random = seed.HasValue ? new Random(seed.Value) : new Random();
 
     public string GenerateRandomName(bool isCoin, int? number = null)
     {

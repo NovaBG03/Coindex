@@ -11,6 +11,7 @@
 
     <ContentPage.Resources>
         <converters:ItemTypeConverter x:Key="ItemTypeConverter" />
+        <converters:BackgroundColorToTextColorConverter x:Key="BgToFgConverter" />
     </ContentPage.Resources>
 
     <Grid RowDefinitions="Auto,*">
@@ -27,6 +28,7 @@
                            Placeholder="Search by name"
                            Text="{Binding ItemNameInputFilter}" />
                     <Button Grid.Column="1"
+                            Margin="15,0,0,0"
                             Text="Clear Filters"
                             Command="{Binding ClearFiltersCommand}"
                             WidthRequest="120" />
@@ -42,7 +44,7 @@
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Grid.Column="1"
-                                         Spacing="5">
+                                         Spacing="5" Margin="15,0,0,0">
                         <Label Text="Filter by Condition:"
                                FontSize="Small" />
                         <Picker ItemsSource="{Binding ConditionNames}"
@@ -74,7 +76,8 @@
 
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="entities:CollectableItem">
-                        <StackLayout Padding="10, 5" Margin="0">
+                        <StackLayout Padding="10, 5"
+                                     Margin="0">
                             <Border Margin="0"
                                     Padding="15"
                                     Stroke="LightGray"
@@ -148,6 +151,7 @@
                                         <CollectionView.ItemTemplate>
                                             <DataTemplate x:DataType="entities:Tag">
                                                 <Border BackgroundColor="{Binding Color}"
+                                                        x:Name="TagBorder"
                                                         Stroke="#999999"
                                                         StrokeThickness="0"
                                                         Padding="8,3"
@@ -155,7 +159,7 @@
                                                     <Label Text="{Binding Name}"
                                                            FontSize="11"
                                                            FontAttributes="Bold"
-                                                           TextColor="#333333"
+                                                           TextColor="{Binding Source={x:Reference TagBorder}, Path=BackgroundColor, Converter={StaticResource BgToFgConverter}}"
                                                            HorizontalOptions="Center"
                                                            VerticalOptions="Center" />
                                                 </Border>

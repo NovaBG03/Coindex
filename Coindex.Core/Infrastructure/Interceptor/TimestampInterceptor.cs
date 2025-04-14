@@ -28,7 +28,6 @@ public class TimestampInterceptor : SaveChangesInterceptor
         var now = DateTime.UtcNow;
 
         foreach (var entry in context.ChangeTracker.Entries<ITimestampEntity>())
-        {
             switch (entry.State)
             {
                 case EntityState.Added:
@@ -39,6 +38,5 @@ public class TimestampInterceptor : SaveChangesInterceptor
                     entry.Entity.UpdatedAt = now;
                     break;
             }
-        }
     }
 }

@@ -30,7 +30,6 @@ public partial class CollectableItemsViewModel : BaseViewModel
     private bool _hasMoreItems = true;
     private bool _isFilterChangedPending;
 
-    private bool _isInitialized;
     private bool _isLoadingMore;
 
     [ObservableProperty] private bool _isRefreshing;
@@ -65,32 +64,27 @@ public partial class CollectableItemsViewModel : BaseViewModel
     [RelayCommand]
     private async Task Initialize()
     {
-        if (!_isInitialized)
+        _tagsByNameDictionary.Clear();
+        TagNames.Clear();
+        TagNames.Add(tagNameAll);
+        (await _tagService.GetAllTagsAsync()).ToList().ForEach(t =>
         {
-            _isInitialized = true;
+            _tagsByNameDictionary[t.Name] = t;
+            TagNames.Add(t.Name);
+        });
 
-            _tagsByNameDictionary.Clear();
-            TagNames.Clear();
-            TagNames.Add(tagNameAll);
-            (await _tagService.GetAllTagsAsync()).ToList().ForEach(t =>
-            {
-                _tagsByNameDictionary[t.Name] = t;
-                TagNames.Add(t.Name);
-            });
+        TagNameInputFilter = string.IsNullOrEmpty(PreSelectedTagName) ? tagNameAll : PreSelectedTagName;
 
-            TagNameInputFilter = string.IsNullOrEmpty(PreSelectedTagName) ? tagNameAll : PreSelectedTagName;
-
-            _conditionsByNameDictionary.Clear();
-            ConditionNames.Clear();
-            ConditionNames.Add(conditionNameAll);
-            Enum.GetValues<ItemCondition>().ToList().ForEach(c =>
-            {
-                var conditionName = c.ToString();
-                _conditionsByNameDictionary[conditionName] = c;
-                ConditionNames.Add(conditionName);
-            });
-            ConditionNameInputFilter = conditionNameAll;
-        }
+        _conditionsByNameDictionary.Clear();
+        ConditionNames.Clear();
+        ConditionNames.Add(conditionNameAll);
+        Enum.GetValues<ItemCondition>().ToList().ForEach(c =>
+        {
+            var conditionName = c.ToString();
+            _conditionsByNameDictionary[conditionName] = c;
+            ConditionNames.Add(conditionName);
+        });
+        ConditionNameInputFilter = conditionNameAll;
 
         await LoadItems();
     }

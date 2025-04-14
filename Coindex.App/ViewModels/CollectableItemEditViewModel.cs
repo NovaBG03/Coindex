@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Globalization;
 using Coindex.App.ViewModels.Base;
 using Coindex.Core.Application.Interfaces.Services;
@@ -5,7 +6,6 @@ using Coindex.Core.Domain.Entities;
 using Coindex.Core.Domain.Enums;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Collections.ObjectModel;
 
 namespace Coindex.App.ViewModels;
 
@@ -16,59 +16,62 @@ public partial class CollectableItemEditViewModel(
     ITagService tagService)
     : BaseViewModel("Item Editor")
 {
-    // Mode tracking
-    [ObservableProperty] [NotifyPropertyChangedFor(nameof(IsCreateMode))]
-    private int _itemId;
-
-    public bool IsCreateMode => ItemId == 0;
-
-    // Item type properties
-    [ObservableProperty] private List<string> _itemTypes = [nameof(Coin), nameof(Bill)];
-
-    [ObservableProperty] [NotifyPropertyChangedFor(nameof(IsCoin))] [NotifyPropertyChangedFor(nameof(IsBill))]
-    private string _selectedItemType = nameof(Coin);
-
-    public bool IsCoin => SelectedItemType == nameof(Coin);
-    public bool IsBill => SelectedItemType == nameof(Bill);
-
-    // Display properties
-    [ObservableProperty] private bool _canSave = true;
-
-    // Common properties
-    [ObservableProperty] private string _name = "";
-    [ObservableProperty] private string _description = "";
-    [ObservableProperty] private string _year = "";
-    [ObservableProperty] private string _country = "";
-    [ObservableProperty] private string _faceValue = "0";
-    [ObservableProperty] private List<ItemCondition> _conditions = Enum.GetValues<ItemCondition>().ToList();
-    [ObservableProperty] private ItemCondition _selectedCondition = ItemCondition.Good;
-
-    // Coin properties
-    [ObservableProperty] private string _mint = "";
-    [ObservableProperty] private string _material = "";
-    [ObservableProperty] private string _weightInGrams = "0";
-    [ObservableProperty] private string _diameterInMM = "0";
-
-    // Bill properties
-    [ObservableProperty] private string _series = "";
-    [ObservableProperty] private string _serialNumber = "";
-    [ObservableProperty] private string _signatureType = "";
-    [ObservableProperty] private string _billType = "";
-    [ObservableProperty] private string _widthInMM = "0";
-    [ObservableProperty] private string _heightInMM = "0";
-
-    // Tag properties
-    [ObservableProperty] private string _tagInput = "";
-    [ObservableProperty] private ObservableCollection<Tag> _selectedTags = [];
-    [ObservableProperty] private ObservableCollection<Tag> _availableTags = [];
-    [ObservableProperty] private ObservableCollection<Tag> _filteredTags = [];
-
     // Random colors for new tags
     private static readonly string[] TagColors =
     {
         "#FF5733", "#33FF57", "#3357FF", "#F033FF", "#FF33F0",
         "#33FFF0", "#F0FF33", "#5733FF", "#FF5733", "#33FF57"
     };
+
+    [ObservableProperty] private ObservableCollection<Tag> _availableTags = [];
+    [ObservableProperty] private string _billType = "";
+
+    // Display properties
+    [ObservableProperty] private bool _canSave = true;
+    [ObservableProperty] private List<ItemCondition> _conditions = Enum.GetValues<ItemCondition>().ToList();
+    [ObservableProperty] private string _country = "";
+    [ObservableProperty] private string _description = "";
+    [ObservableProperty] private string _diameterInMM = "0";
+    [ObservableProperty] private string _faceValue = "0";
+    [ObservableProperty] private ObservableCollection<Tag> _filteredTags = [];
+
+    [ObservableProperty] private string _heightInMM = "0";
+
+    // Mode tracking
+    [ObservableProperty] [NotifyPropertyChangedFor(nameof(IsCreateMode))]
+    private int _itemId;
+
+    // Item type properties
+    [ObservableProperty] private List<string> _itemTypes = [nameof(Coin), nameof(Bill)];
+    [ObservableProperty] private string _material = "";
+
+    // Coin properties
+    [ObservableProperty] private string _mint = "";
+
+    // Common properties
+    [ObservableProperty] private string _name = "";
+    [ObservableProperty] private ItemCondition _selectedCondition = ItemCondition.Good;
+
+    [ObservableProperty] [NotifyPropertyChangedFor(nameof(IsCoin))] [NotifyPropertyChangedFor(nameof(IsBill))]
+    private string _selectedItemType = nameof(Coin);
+
+    [ObservableProperty] private ObservableCollection<Tag> _selectedTags = [];
+    [ObservableProperty] private string _serialNumber = "";
+
+    // Bill properties
+    [ObservableProperty] private string _series = "";
+    [ObservableProperty] private string _signatureType = "";
+
+    // Tag properties
+    [ObservableProperty] private string _tagInput = "";
+    [ObservableProperty] private string _weightInGrams = "0";
+    [ObservableProperty] private string _widthInMM = "0";
+    [ObservableProperty] private string _year = "";
+
+    public bool IsCreateMode => ItemId == 0;
+
+    public bool IsCoin => SelectedItemType == nameof(Coin);
+    public bool IsBill => SelectedItemType == nameof(Bill);
 
     [RelayCommand]
     private async Task Initialize()
@@ -241,13 +244,9 @@ public partial class CollectableItemEditViewModel(
             item.Tags = SelectedTags.ToList();
 
             if (IsCreateMode)
-            {
                 await collectableItemService.AddItemAsync(item);
-            }
             else
-            {
                 await collectableItemService.UpdateItemAsync(item);
-            }
 
             await NavigateBack();
         }
@@ -369,12 +368,8 @@ public partial class CollectableItemEditViewModel(
     private static async Task NavigateBack()
     {
         if (Shell.Current.Navigation.NavigationStack.Count > 1)
-        {
             await Shell.Current.GoToAsync("..");
-        }
         else
-        {
             await Shell.Current.GoToAsync("//CollectableItemsPage");
-        }
     }
 }

@@ -7,11 +7,6 @@ namespace Coindex.Core.Application.Services;
 
 public class CollectableItemService(ICollectableItemRepository collectableItemRepository) : ICollectableItemService
 {
-    public async Task<IEnumerable<CollectableItem>> GetAllItemsAsync()
-    {
-        return await collectableItemRepository.GetAllAsync();
-    }
-
     public async Task<IEnumerable<CollectableItem>> GetPagedItemsAsync(int pageNumber, int pageSize,
         CollectableItemFilter? filter = null)
     {
@@ -42,5 +37,10 @@ public class CollectableItemService(ICollectableItemRepository collectableItemRe
     public async Task UpdateItemAsync(CollectableItem item)
     {
         await collectableItemRepository.UpdateAsync(item);
+    }
+
+    public async Task<IEnumerable<CollectableItem>> GetAllItemsAsync()
+    {
+        return await collectableItemRepository.GetAllAsync();
     }
 }

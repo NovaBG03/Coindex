@@ -9,10 +9,7 @@ public class DatabaseInitializer(ApplicationDbContext context, ICollectableItemD
     {
         context.Database.EnsureCreated();
 
-        if (!context.Coins.Any() || !context.Bills.Any())
-        {
-            SeedTestData();
-        }
+        if (!context.Coins.Any() || !context.Bills.Any()) SeedTestData();
     }
 
     private void SeedTestData()
