@@ -9,9 +9,9 @@
     Title="Coindex">
 
     <ShellContent
-        Title="All Collections"
-        ContentTemplate="{DataTemplate view:TagsPage}"
-        Route="TagsPage" />
+        Title="Home"
+        ContentTemplate="{DataTemplate view:HomePage}"
+        Route="HomePage" />
 
     <ShellContent
         Title="Collection"
@@ -22,5 +22,10 @@
         Title="Add new item"
         ContentTemplate="{DataTemplate view:CollectableItemEditPage}"
         Route="CollectableItemEditPage" />
+
+    <ShellContent
+        Title="Tags"
+        ContentTemplate="{DataTemplate view:TagsPage}"
+        Route="TagsPage" />
 
 </Shell>

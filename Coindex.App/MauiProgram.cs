@@ -7,6 +7,7 @@ using Coindex.Core.Infrastructure.Data;
 using Coindex.Core.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using SQLitePCL;
 
 namespace Coindex.App;
 
@@ -30,7 +31,7 @@ public static class MauiProgram
         Console.WriteLine($"db path: {dbPath}");
 
         // Initialize SQLite only once at application startup
-        SQLitePCL.Batteries_V2.Init();
+        Batteries_V2.Init();
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlite($"Data Source={dbPath}"));
 
@@ -48,16 +49,17 @@ public static class MauiProgram
         //     new CollectableItemDataGeneratorService(1234));
 
         // ViewModels
-        builder.Services.AddSingleton<TagsViewModel>();
+        builder.Services.AddTransient<TagsViewModel>();
         builder.Services.AddSingleton<CollectableItemsViewModel>();
         builder.Services.AddTransient<CollectableItemDetailsViewModel>();
         builder.Services.AddTransient<CollectableItemEditViewModel>();
 
         // Pages
-        builder.Services.AddSingleton<TagsPage>();
+        builder.Services.AddSingleton<HomePage>();
         builder.Services.AddSingleton<CollectableItemsPage>();
         builder.Services.AddTransient<CollectableItemDetailsPage>();
         builder.Services.AddTransient<CollectableItemEditPage>();
+        builder.Services.AddSingleton<TagsPage>();
 
         builder.Services.AddSingleton<AppShell>();
 

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:Coindex.App.ViewModels"
+             xmlns:entities="clr-namespace:Coindex.Core.Domain.Entities;assembly=Coindex.Core"
+             x:Class="Coindex.App.Views.HomePage"
+             x:DataType="viewmodel:TagsViewModel"
+             Title="{Binding Title}">
+
+    <RefreshView Command="{Binding InitializeCommand}"
+                 IsRefreshing="{Binding IsBusy}">
+        <ScrollView>
+            <Grid RowDefinitions="Auto,Auto,Auto"
+                  Padding="15, 10">
+                <!-- Greeting Text -->
+                <Label Grid.Row="0"
+                       Text="Welcome to Coindex!"
+                       FontSize="28"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       Margin="0,20,0,5" />
+
+                <!-- Instruction Text -->
+                <Label Grid.Row="1"
+                       Text="Select a collection to browse your coins"
+                       FontSize="18"
+                       HorizontalOptions="Center"
+                       Margin="0,0,0,20" />
+
+                <!-- Loading Indicator -->
+                <ActivityIndicator Grid.Row="2"
+                                   IsVisible="{Binding IsBusy}"
+                                   IsRunning="{Binding IsBusy}"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"
+                                   HeightRequest="50"
+                                   WidthRequest="50" />
+
+                <!-- Tags grid view -->
+                <Grid Grid.Row="2"
+                      IsEnabled="{Binding IsNotBusy}"
+                      IsVisible="{Binding IsNotBusy}">
+                    <CollectionView ItemsSource="{Binding Tags}"
+                                    SelectionMode="None"
+                                    VerticalScrollBarVisibility="Never">
+                        <CollectionView.EmptyView>
+                            <StackLayout HorizontalOptions="Center"
+                                         VerticalOptions="Center">
+                                <Label Text="No collections available"
+                                       FontSize="Medium" />
+                                <Label Text="Collections will appear here once added to items"
+                                       FontSize="Small" />
+                            </StackLayout>
+                        </CollectionView.EmptyView>
+
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout Orientation="Vertical"
+                                             Span="2"
+                                             VerticalItemSpacing="15"
+                                             HorizontalItemSpacing="15" />
+                        </CollectionView.ItemsLayout>
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="entities:Tag">
+                                <Border Stroke="{Binding Color}"
+                                        BackgroundColor="{Binding Color}"
+                                        StrokeShape="RoundRectangle 12"
+                                        StrokeThickness="1"
+                                        Padding="15"
+                                        Margin="5"
+                                        HeightRequest="120">
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:TagsViewModel}}, Path=TagSelectedCommand}"
+                                            CommandParameter="{Binding Name}" />
+                                    </Border.GestureRecognizers>
+                                    <VerticalStackLayout HorizontalOptions="Center"
+                                                         VerticalOptions="Center"
+                                                         Spacing="8">
+                                        <Label Text="{Binding Name}"
+                                               TextColor="Black"
+                                               FontSize="20"
+                                               FontAttributes="Bold"
+                                               HorizontalOptions="Center" />
+                                        <Label Text="Tap to view"
+                                               TextColor="Black"
+                                               Opacity="0.7"
+                                               FontSize="14"
+                                               HorizontalOptions="Center" />
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Grid>
+            </Grid>
+        </ScrollView>
+    </RefreshView>
+</ContentPage>

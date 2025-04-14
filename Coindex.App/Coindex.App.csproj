@@ -69,4 +69,17 @@
         <ProjectReference Include="..\Coindex.Core\Coindex.Core.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <MauiXaml Update="Views\HomePage.xaml">
+            <SubType>Designer</SubType>
+        </MauiXaml>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="Views\HomePage.xaml.cs">
+            <DependentUpon>HomePage.xaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+    </ItemGroup>
+
 </Project>

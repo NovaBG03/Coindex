@@ -65,7 +65,7 @@
                 <CollectionView.EmptyView>
                     <StackLayout HorizontalOptions="Center"
                                  VerticalOptions="Center">
-                        <Label Text="No items in your collection"
+                        <Label Text="No items found"
                                FontSize="Medium" />
                         <Label Text="Items will appear here once added"
                                FontSize="Small" />
@@ -74,96 +74,97 @@
 
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="entities:CollectableItem">
-                        <Border Margin="20,5"
-                                Padding="15"
-                                Stroke="LightGray"
-                                StrokeThickness="1"
-                                StrokeShape="RoundRectangle 8,8,8,8"
-                                BackgroundColor="White">
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer
-                                    CommandParameter="{Binding .}"
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:CollectableItemsViewModel}}, Path=ItemTappedCommand}" />
-                            </Border.GestureRecognizers>
+                        <StackLayout Padding="10, 5" Margin="0">
+                            <Border Margin="0"
+                                    Padding="15"
+                                    Stroke="LightGray"
+                                    StrokeThickness="1"
+                                    StrokeShape="RoundRectangle 8,8,8,8"
+                                    BackgroundColor="White">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        CommandParameter="{Binding .}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:CollectableItemsViewModel}}, Path=ItemTappedCommand}" />
+                                </Border.GestureRecognizers>
 
-                            <Grid RowDefinitions="Auto,Auto,Auto,Auto"
-                                  ColumnDefinitions="Auto,*">
-                                <Image Grid.Row="0"
-                                       Grid.RowSpan="4"
-                                       Grid.Column="0"
-                                       WidthRequest="80"
-                                       HeightRequest="80"
-                                       Aspect="AspectFill"
-                                       Source="{Binding Converter={StaticResource ItemTypeConverter}}"
-                                       Margin="0,0,15,0">
-                                </Image>
+                                <Grid RowDefinitions="Auto,Auto,Auto,Auto"
+                                      ColumnDefinitions="Auto,*">
+                                    <Image Grid.Row="0"
+                                           Grid.RowSpan="4"
+                                           Grid.Column="0"
+                                           WidthRequest="80"
+                                           HeightRequest="80"
+                                           Aspect="AspectFill"
+                                           Source="{Binding Converter={StaticResource ItemTypeConverter}}"
+                                           Margin="0,0,15,0" />
 
-                                <Label Grid.Row="0"
-                                       Grid.Column="1"
-                                       Text="{Binding Name}"
-                                       FontAttributes="Bold"
-                                       FontSize="Medium" />
+                                    <Label Grid.Row="0"
+                                           Grid.Column="1"
+                                           Text="{Binding Name}"
+                                           FontAttributes="Bold"
+                                           FontSize="Medium" />
 
-                                <Label Grid.Row="1"
-                                       Grid.Column="1"
-                                       Text="{Binding Description}"
-                                       FontSize="Small"
-                                       LineBreakMode="TailTruncation"
-                                       MaxLines="2" />
+                                    <Label Grid.Row="1"
+                                           Grid.Column="1"
+                                           Text="{Binding Description}"
+                                           FontSize="Small"
+                                           LineBreakMode="TailTruncation"
+                                           MaxLines="2" />
 
-                                <FlexLayout Grid.Row="2"
-                                            Grid.Column="1"
-                                            Direction="Row"
-                                            JustifyContent="Start"
-                                            AlignItems="Center"
-                                            Wrap="Wrap"
-                                            Margin="0,5,0,0">
-
-                                    <Label Text="{Binding Year, StringFormat='Year: {0}'}"
-                                           Margin="0,0,10,0"
-                                           FontSize="Micro" />
-
-                                    <Label Text="{Binding Country, StringFormat='Country: {0}'}"
-                                           Margin="0,0,10,0"
-                                           FontSize="Micro" />
-
-                                    <Label Text="{Binding FaceValue, StringFormat='Value: {0}'}"
-                                           Margin="0,0,10,0"
-                                           FontSize="Micro" />
-
-                                    <Label Text="{Binding Condition, StringFormat='Condition: {0}'}"
-                                           Margin="0,0,10,0"
-                                           FontSize="Micro" />
-                                </FlexLayout>
-
-                                <CollectionView Grid.Row="3"
+                                    <FlexLayout Grid.Row="2"
                                                 Grid.Column="1"
-                                                ItemsSource="{Binding Tags}"
-                                                Margin="0,5,0,0"
-                                                HeightRequest="30">
-                                    <CollectionView.ItemsLayout>
-                                        <LinearItemsLayout Orientation="Horizontal"
-                                                           ItemSpacing="5" />
-                                    </CollectionView.ItemsLayout>
-                                    <CollectionView.ItemTemplate>
-                                        <DataTemplate x:DataType="entities:Tag">
-                                            <Border BackgroundColor="{Binding Color}"
-                                                    Stroke="#999999"
-                                                    StrokeThickness="0.5"
-                                                    Padding="8,3"
-                                                    StrokeShape="RoundRectangle 12,12,12,12">
-                                                <Label Text="{Binding Name}"
-                                                       FontSize="11"
-                                                       FontAttributes="Bold"
-                                                       TextColor="#333333"
-                                                       HorizontalOptions="Center"
-                                                       VerticalOptions="Center" />
-                                            </Border>
-                                        </DataTemplate>
-                                    </CollectionView.ItemTemplate>
-                                </CollectionView>
-                            </Grid>
-                        </Border>
+                                                Direction="Row"
+                                                JustifyContent="Start"
+                                                AlignItems="Center"
+                                                Wrap="Wrap"
+                                                Margin="0,5,0,0">
+
+                                        <Label Text="{Binding Year, StringFormat='Year: {0}'}"
+                                               Margin="0,0,10,0"
+                                               FontSize="Micro" />
+
+                                        <Label Text="{Binding Country, StringFormat='Country: {0}'}"
+                                               Margin="0,0,10,0"
+                                               FontSize="Micro" />
+
+                                        <Label Text="{Binding FaceValue, StringFormat='Value: {0}'}"
+                                               Margin="0,0,10,0"
+                                               FontSize="Micro" />
+
+                                        <Label Text="{Binding Condition, StringFormat='Condition: {0}'}"
+                                               Margin="0,0,10,0"
+                                               FontSize="Micro" />
+                                    </FlexLayout>
+
+                                    <CollectionView Grid.Row="3"
+                                                    Grid.Column="1"
+                                                    ItemsSource="{Binding Tags}"
+                                                    Margin="0,5,0,0"
+                                                    HeightRequest="30">
+                                        <CollectionView.ItemsLayout>
+                                            <LinearItemsLayout Orientation="Horizontal"
+                                                               ItemSpacing="5" />
+                                        </CollectionView.ItemsLayout>
+                                        <CollectionView.ItemTemplate>
+                                            <DataTemplate x:DataType="entities:Tag">
+                                                <Border BackgroundColor="{Binding Color}"
+                                                        Stroke="#999999"
+                                                        StrokeThickness="0.5"
+                                                        Padding="8,3"
+                                                        StrokeShape="RoundRectangle 12,12,12,12">
+                                                    <Label Text="{Binding Name}"
+                                                           FontSize="11"
+                                                           FontAttributes="Bold"
+                                                           TextColor="#333333"
+                                                           HorizontalOptions="Center"
+                                                           VerticalOptions="Center" />
+                                                </Border>
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                    </CollectionView>
+                                </Grid>
+                            </Border>
+                        </StackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

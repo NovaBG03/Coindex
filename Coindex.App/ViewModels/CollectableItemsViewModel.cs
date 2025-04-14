@@ -19,25 +19,25 @@ public partial class CollectableItemsViewModel : BaseViewModel
 
     private const int pageSize = 10;
     private const int firstPage = 1;
+    private readonly ICollectableItemService _collectableItemService;
+    private readonly Dictionary<string, ItemCondition> _conditionsByNameDictionary = [];
+    private readonly IDispatcherTimer _filterChangedDebounceTimer;
 
     private readonly Dictionary<string, Tag> _tagsByNameDictionary = [];
-    private readonly Dictionary<string, ItemCondition> _conditionsByNameDictionary = [];
-    private readonly ICollectableItemService _collectableItemService;
     private readonly ITagService _tagService;
-    private readonly IDispatcherTimer _filterChangedDebounceTimer;
-    private bool _isFilterChangedPending;
-
-    private bool _isInitialized = false;
+    [ObservableProperty] private string _conditionNameInputFilter = conditionNameAll;
     private int _currentPage = firstPage;
     private bool _hasMoreItems = true;
+    private bool _isFilterChangedPending;
+
+    private bool _isInitialized;
     private bool _isLoadingMore;
 
     [ObservableProperty] private bool _isRefreshing;
     [ObservableProperty] private string _itemNameInputFilter = string.Empty;
-    [ObservableProperty] private string _tagNameInputFilter = tagNameAll;
-    [ObservableProperty] private string _conditionNameInputFilter = conditionNameAll;
 
     [ObservableProperty] private string _preSelectedTagName = string.Empty;
+    [ObservableProperty] private string _tagNameInputFilter = tagNameAll;
 
     public CollectableItemsViewModel(ICollectableItemService collectableItemService, ITagService tagService) :
         base("Collection")
@@ -119,10 +119,7 @@ public partial class CollectableItemsViewModel : BaseViewModel
 
     partial void OnPreSelectedTagNameChanged(string value)
     {
-        if (!string.IsNullOrEmpty(value) && value != tagNameAll)
-        {
-            TagNameInputFilter = value;
-        }
+        TagNameInputFilter = string.IsNullOrEmpty(PreSelectedTagName) ? tagNameAll : PreSelectedTagName;
     }
 
     [RelayCommand]
@@ -156,10 +153,7 @@ public partial class CollectableItemsViewModel : BaseViewModel
 
             Items.Clear();
             var items = await _collectableItemService.GetPagedItemsAsync(_currentPage, pageSize, filter);
-            foreach (var item in items)
-            {
-                Items.Add(item);
-            }
+            foreach (var item in items) Items.Add(item);
 
             // Check if we have more items
             var totalCount = await _collectableItemService.GetTotalCountAsync(filter);
@@ -200,10 +194,7 @@ public partial class CollectableItemsViewModel : BaseViewModel
                 return;
             }
 
-            foreach (var item in newItems)
-            {
-                Items.Add(item);
-            }
+            foreach (var item in newItems) Items.Add(item);
 
             var totalCount = await _collectableItemService.GetTotalCountAsync(filter);
             _hasMoreItems = Items.Count < totalCount;
@@ -239,22 +230,13 @@ public partial class CollectableItemsViewModel : BaseViewModel
     {
         var filter = new CollectableItemFilter();
         var name = GetItemNameFilter();
-        if (name is not null)
-        {
-            filter.Name = name;
-        }
+        if (name is not null) filter.Name = name;
 
         var tagId = GetTagIdFilter();
-        if (tagId is not null)
-        {
-            filter.TagId = tagId;
-        }
+        if (tagId is not null) filter.TagId = tagId;
 
         var condition = GetConditionFilter();
-        if (condition is not null)
-        {
-            filter.Condition = condition;
-        }
+        if (condition is not null) filter.Condition = condition;
 
         return filter;
     }
@@ -270,9 +252,7 @@ public partial class CollectableItemsViewModel : BaseViewModel
         if (!string.IsNullOrWhiteSpace(TagNameInputFilter)
             && TagNameInputFilter != tagNameAll
             && _tagsByNameDictionary.TryGetValue(TagNameInputFilter, out var tag))
-        {
             return tag.Id;
-        }
 
         return null;
     }
@@ -282,9 +262,7 @@ public partial class CollectableItemsViewModel : BaseViewModel
         if (!string.IsNullOrWhiteSpace(ConditionNameInputFilter)
             && ConditionNameInputFilter != conditionNameAll
             && _conditionsByNameDictionary.TryGetValue(ConditionNameInputFilter, out var condition))
-        {
             return condition;
-        }
 
         return null;
     }
