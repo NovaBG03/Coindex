@@ -149,7 +149,7 @@
                                             <DataTemplate x:DataType="entities:Tag">
                                                 <Border BackgroundColor="{Binding Color}"
                                                         Stroke="#999999"
-                                                        StrokeThickness="0.5"
+                                                        StrokeThickness="0"
                                                         Padding="8,3"
                                                         StrokeShape="RoundRectangle 12,12,12,12">
                                                     <Label Text="{Binding Name}"

@@ -23,7 +23,7 @@
 
                 <!-- Instruction Text -->
                 <Label Grid.Row="1"
-                       Text="Select a collection to browse your coins"
+                       Text="Select a collection to browse your coins and bills"
                        FontSize="18"
                        HorizontalOptions="Center"
                        Margin="0,0,0,20" />

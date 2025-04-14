@@ -44,4 +44,9 @@ public partial class TagsViewModel(ITagService tagService) : BaseViewModel("All 
         var tagNameQueryParam = tagName == allTagName ? "" : tagName;
         await Shell.Current.GoToAsync($"//CollectableItemsPage?tagName={tagNameQueryParam}");
     }
+
+    [RelayCommand]
+    private async Task EditTag(int tagId)
+    {
+    }
 }

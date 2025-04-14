@@ -4,13 +4,40 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodel="clr-namespace:Coindex.App.ViewModels"
              xmlns:entities="clr-namespace:Coindex.Core.Domain.Entities;assembly=Coindex.Core"
+             xmlns:converters="clr-namespace:Coindex.App.Converters"
              x:Class="Coindex.App.Views.TagsPage"
              x:DataType="viewmodel:TagsViewModel"
-             Title="{Binding Title}">
+             Title="{Binding Title}"
+             BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}">
 
-    <Grid RowDefinitions="*">
+    <ContentPage.Resources>
+        <converters:StringIsNullOrEmptyConverter x:Key="StringIsNullOrEmptyConverter" />
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*">
+        <!-- Header -->
+        <Border Grid.Row="0"
+                BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray800}}"
+                Margin="10,15,10,0"
+                Padding="10,15"
+                StrokeShape="RoundRectangle 12"
+                Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
+                StrokeThickness="1"
+                Shadow="{Shadow Offset='0,2', Radius='4', Opacity='0.2'}">
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Your Tags"
+                       FontSize="22"
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}" />
+                <Label Text="Organize your collections with these tags"
+                       FontSize="14"
+                       TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}" />
+            </VerticalStackLayout>
+        </Border>
+
         <!-- Loading Indicator -->
-        <ActivityIndicator IsVisible="{Binding IsBusy}"
+        <ActivityIndicator Grid.Row="1"
+                           IsVisible="{Binding IsBusy}"
                            IsRunning="{Binding IsBusy}"
                            HorizontalOptions="Center"
                            VerticalOptions="Center"
@@ -18,52 +45,143 @@
                            WidthRequest="50" />
 
         <!-- Tags grid view -->
-        <RefreshView Grid.Row="0"
+        <RefreshView Grid.Row="1"
                      IsEnabled="{Binding IsNotBusy}"
                      IsVisible="{Binding IsNotBusy}"
-                     Command="{Binding InitializeCommand}">
+                     Command="{Binding InitializeCommand}"
+                     Margin="10,15,10,10">
             <CollectionView ItemsSource="{Binding Tags}"
                             SelectionMode="None">
                 <CollectionView.EmptyView>
-                    <StackLayout HorizontalOptions="Center"
-                                 VerticalOptions="Center">
-                        <Label Text="No tags available"
-                               FontSize="Medium" />
-                        <Label Text="Tags will appear here once added to items"
-                               FontSize="Small" />
-                    </StackLayout>
+                    <Border
+                        BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray800}}"
+                        Padding="30"
+                        Margin="20"
+                        StrokeShape="RoundRectangle 16"
+                        Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
+                        StrokeThickness="1"
+                        Shadow="{Shadow Offset='0,4', Radius='8', Opacity='0.2'}">
+                        <VerticalStackLayout HorizontalOptions="Center"
+                                             VerticalOptions="Center"
+                                             Spacing="15">
+                            <Label Text="No tags available"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}"
+                                   HorizontalOptions="Center" />
+                            <Label Text="Tags will appear here once added to items"
+                                   FontSize="16"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
+                                   HorizontalOptions="Center"
+                                   MaxLines="2"
+                                   LineBreakMode="WordWrap"
+                                   HorizontalTextAlignment="Center" />
+                            <Button Text="Go to Collections"
+                                    Padding="15,7"
+                                    CornerRadius="20"
+                                    BackgroundColor="{StaticResource Primary}"
+                                    TextColor="{StaticResource White}"
+                                    FontAttributes="Bold"
+                                    HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                    </Border>
                 </CollectionView.EmptyView>
 
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical"
-                                     Span="3"
-                                     VerticalItemSpacing="10"
-                                     HorizontalItemSpacing="10" />
+                                     Span="2"
+                                     VerticalItemSpacing="15"
+                                     HorizontalItemSpacing="15" />
                 </CollectionView.ItemsLayout>
 
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="entities:Tag">
-                        <Border Stroke="{Binding Color}"
-                                StrokeThickness="1"
-                                StrokeShape="RoundRectangle 8"
-                                BackgroundColor="{Binding Color}"
-                                Padding="10"
-                                Margin="5"
-                                WidthRequest="100"
-                                HeightRequest="100">
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:TagsViewModel}}, Path=TagSelectedCommand}"
-                                    CommandParameter="{Binding Name}" />
-                            </Border.GestureRecognizers>
-                            <VerticalStackLayout HorizontalOptions="Center"
-                                                 VerticalOptions="Center">
-                                <Label Text="{Binding Name}"
-                                       TextColor="Black"
-                                       FontSize="16"
-                                       FontAttributes="Bold"
-                                       HorizontalOptions="Center" />
-                            </VerticalStackLayout>
+                        <Border
+                            BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray800}}"
+                            Padding="0"
+                            StrokeShape="RoundRectangle 16"
+                            Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
+                            StrokeThickness="1"
+                            Shadow="{Shadow Offset='0,2', Radius='4', Opacity='0.1'}">
+                            <Grid RowDefinitions="Auto,*"
+                                  RowSpacing="0">
+                                <!-- Tag Color Header -->
+                                <Border Grid.Row="0"
+                                        BackgroundColor="{Binding Color}"
+                                        HeightRequest="10"
+                                        StrokeShape="RoundRectangle 16,16,0,0" />
+
+                                <!-- Replaced VerticalStackLayout with Grid for content + buttons -->
+                                <Grid Grid.Row="1"
+                                      ColumnDefinitions="*,Auto,Auto"
+                                      Padding="15,10"
+                                      ColumnSpacing="5">
+
+                                    <!-- Text content moved to Column 0 -->
+                                    <VerticalStackLayout Grid.Column="0"
+                                                         Spacing="8"
+                                                         VerticalOptions="Center">
+                                        <Label Text="{Binding Name}"
+                                               TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}"
+                                               FontSize="18"
+                                               FontAttributes="Bold"
+                                               LineBreakMode="TailTruncation" />
+
+                                        <Label
+                                            TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray400}}"
+                                            FontSize="14"
+                                            LineBreakMode="TailTruncation"
+                                            MaxLines="2"
+                                            VerticalOptions="Start">
+                                            <Label.Triggers>
+                                                <DataTrigger TargetType="Label"
+                                                             Binding="{Binding Description, Converter={StaticResource StringIsNullOrEmptyConverter}}"
+                                                             Value="True">
+                                                    <Setter Property="Text"
+                                                            Value="No description" />
+                                                    <Setter Property="FontAttributes"
+                                                            Value="Italic" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Label"
+                                                             Binding="{Binding Description, Converter={StaticResource StringIsNullOrEmptyConverter}}"
+                                                             Value="False">
+                                                    <Setter Property="Text"
+                                                            Value="{Binding Description}" />
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
+                                    </VerticalStackLayout>
+
+                                    <!-- View items Button moved to Column 1 -->
+                                    <Button Grid.Column="1"
+                                            Text="View items"
+                                            TextColor="{StaticResource White}"
+                                            FontSize="11"
+                                            FontAttributes="Bold"
+                                            VerticalOptions="Center"
+                                            BackgroundColor="{StaticResource Primary}"
+                                            CornerRadius="15"
+                                            HeightRequest="30"
+                                            Padding="10,0"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:TagsViewModel}}, Path=TagSelectedCommand}"
+                                            CommandParameter="{Binding Name}" />
+
+                                    <!-- Edit Button moved to Column 2 -->
+                                    <Button Grid.Column="2"
+                                            Text="Edit"
+                                            TextColor="{StaticResource White}"
+                                            FontSize="11"
+                                            FontAttributes="Bold"
+                                            VerticalOptions="Center"
+                                            BackgroundColor="{StaticResource Gray500}"
+                                            CornerRadius="15"
+                                            HeightRequest="30"
+                                            Padding="10,0"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:TagsViewModel}}, Path=EditTagCommand}"
+                                            CommandParameter="{Binding Id}" />
+                                </Grid>
+
+                            </Grid>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
