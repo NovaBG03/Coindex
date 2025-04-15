@@ -2,7 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Coindex.App.ViewModels.Base;
 
-public partial class BaseViewModel(string title = "Coindex") : ObservableObject
+public partial class BaseViewModel(string title = "Coindex") : ObservableObject, IBaseViewModel
 {
     [ObservableProperty] [NotifyPropertyChangedFor(nameof(IsNotBusy))]
     private bool _isBusy;

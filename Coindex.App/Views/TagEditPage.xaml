@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Coindex.App.ViewModels"
+             x:Class="Coindex.App.Views.TagEditPage"
+             x:DataType="vm:ITagEditViewModel"
+             Title="{Binding Title}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20"
+                             Spacing="15">
+
+            <Label Text="Tag Name"
+                   Style="{StaticResource SubHeadline}" />
+            <Border Padding="10"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray800}}"
+                    Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 8"
+                    Margin="0,5,0,5"
+                    Shadow="{Shadow Offset='0,2', Radius='4', Opacity='0.1'}">
+                <Entry Placeholder="Enter tag name"
+                       Text="{Binding TagName}" />
+            </Border>
+
+            <Label Text="Description (Optional)"
+                   Style="{StaticResource SubHeadline}" />
+            <Border Padding="10"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray800}}"
+                    Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 8"
+                    Margin="0,5,0,5"
+                    Shadow="{Shadow Offset='0,2', Radius='4', Opacity='0.1'}">
+                <Editor Placeholder="Enter description"
+                        Text="{Binding TagDescription}"
+                        AutoSize="TextChanges"
+                        HeightRequest="100" />
+            </Border>
+
+            <Label Text="Color"
+                   Style="{StaticResource SubHeadline}" />
+            <Border Padding="10"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray800}}"
+                    Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 8"
+                    Margin="0,5,0,5"
+                    Shadow="{Shadow Offset='0,2', Radius='4', Opacity='0.1'}">
+                <HorizontalStackLayout Spacing="10"
+                                       VerticalOptions="Center">
+                    <Border BackgroundColor="{Binding TagColor}"
+                            HeightRequest="30"
+                            WidthRequest="30"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 15"
+                            Stroke="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray900}}" />
+                    <Entry Placeholder="#RRGGBB"
+                           Text="{Binding TagColor}"
+                           VerticalOptions="Center"
+                           HorizontalOptions="FillAndExpand" />
+                </HorizontalStackLayout>
+            </Border>
+
+            <!-- You could add a Color Picker here later if desired -->
+
+            <!-- Action Buttons -->
+            <HorizontalStackLayout Spacing="10"
+                                   HorizontalOptions="End">
+                <Button Text="Cancel"
+                        Command="{Binding CancelCommand}"
+                        BackgroundColor="LightGray"
+                        TextColor="Black" />
+                <Button Text="Save"
+                        Command="{Binding SaveCommand}"
+                        IsEnabled="{Binding CanSave}" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

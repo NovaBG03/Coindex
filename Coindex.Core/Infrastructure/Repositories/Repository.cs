@@ -16,9 +16,14 @@ public class Repository<T>(ApplicationDbContext context) : IRepository<T>
         return await DbSet.FindAsync(id);
     }
 
+    public T? GetById(int id)
+    {
+        return DbSet.Find(id);
+    }
+
     public async Task<IEnumerable<T>> GetAllAsync()
     {
-        return await DbSet.ToListAsync();
+        return await DbSet.AsNoTracking().ToListAsync();
     }
 
     public async Task AddAsync(T entity)

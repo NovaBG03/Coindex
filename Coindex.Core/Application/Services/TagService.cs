@@ -15,4 +15,26 @@ public class TagService(ITagRepository tagRepository) : ITagService
     {
         return await tagRepository.GetByIdAsync(id);
     }
+
+    public async Task<Tag> CreateTagAsync(string name, string description, string color)
+    {
+        var newTag = new Tag
+        {
+            Name = name,
+            Description = description,
+            Color = color
+        };
+        await tagRepository.AddAsync(newTag);
+        return newTag;
+    }
+
+    public async Task UpdateTagAsync(Tag tag)
+    {
+        await tagRepository.UpdateAsync(tag);
+    }
+
+    public Tag? GetTagById(int id)
+    {
+        return tagRepository.GetById(id);
+    }
 }

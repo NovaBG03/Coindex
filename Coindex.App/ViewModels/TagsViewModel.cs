@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using Coindex.App.ViewModels.Base;
+using Coindex.App.Views;
 using Coindex.Core.Application.Interfaces.Services;
 using Coindex.Core.Domain.Entities;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -13,7 +14,7 @@ public partial class TagsViewModel(ITagService tagService) : BaseViewModel("All 
 
     [ObservableProperty] private ObservableCollection<Tag> _tags = [];
 
-    public bool ShouldAddTagForAllNavigation { get; set; } = false;
+    public bool ShouldAddTagForAllNavigation { get; set; }
 
     [RelayCommand]
     private async Task Initialize()
@@ -24,7 +25,6 @@ public partial class TagsViewModel(ITagService tagService) : BaseViewModel("All 
             Tags.Clear();
 
             var allTags = await tagService.GetAllTagsAsync();
-            // "#ff00ff"
             if (ShouldAddTagForAllNavigation) Tags.Add(new Tag { Name = allTagName, Color = "#000000" });
             foreach (var tag in allTags) Tags.Add(tag);
         }
@@ -41,13 +41,20 @@ public partial class TagsViewModel(ITagService tagService) : BaseViewModel("All 
     [RelayCommand]
     private async Task TagSelected(string? tagName)
     {
-        // var queryParams = string.IsNullOrEmpty(tagName) || tagName == allTagName ? "" : $"?tagName={tagName}";
         var tagNameQueryParam = tagName == allTagName ? "" : tagName;
-        await Shell.Current.GoToAsync($"//CollectableItemsPage?tagName={tagNameQueryParam}");
+        await Shell.Current.GoToAsync($"//{nameof(CollectableItemsPage)}?tagName={tagNameQueryParam}");
     }
 
     [RelayCommand]
-    private async Task EditTag(int tagId)
+    private async Task CreateTag()
     {
+        await Shell.Current.GoToAsync(nameof(TagEditPage));
+    }
+
+    [RelayCommand]
+    private async Task EditTag(Tag? tag)
+    {
+        if (tag is null) return;
+        await Shell.Current.GoToAsync($"{nameof(TagEditPage)}?tagId={tag.Id}");
     }
 }

@@ -10,10 +10,12 @@ public partial class AppShell : Shell
         RegisterRoutes();
     }
 
-    private void RegisterRoutes()
+    private static void RegisterRoutes()
     {
-        Routing.RegisterRoute(nameof(TagsPage), typeof(TagsPage));
+        // Routing.RegisterRoute(nameof(CollectableItemsPage), typeof(CollectableItemsPage));
         Routing.RegisterRoute(nameof(CollectableItemDetailsPage), typeof(CollectableItemDetailsPage));
         Routing.RegisterRoute(nameof(CollectableItemEditPage), typeof(CollectableItemEditPage));
+        // Routing.RegisterRoute(nameof(TagsPage), typeof(TagsPage));
+        Routing.RegisterRoute(nameof(TagEditPage), typeof(TagEditPage));
     }
 }

@@ -53,6 +53,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<CollectableItemsViewModel>();
         builder.Services.AddTransient<CollectableItemDetailsViewModel>();
         builder.Services.AddTransient<CollectableItemEditViewModel>();
+        builder.Services.AddTransient<TagCreateViewModel>();
+        builder.Services.AddTransient<TagEditViewModel>();
 
         // Pages
         builder.Services.AddSingleton<HomePage>();
@@ -60,6 +62,7 @@ public static class MauiProgram
         builder.Services.AddTransient<CollectableItemDetailsPage>();
         builder.Services.AddTransient<CollectableItemEditPage>();
         builder.Services.AddSingleton<TagsPage>();
+        builder.Services.AddTransient<TagEditPage>();
 
         builder.Services.AddSingleton<AppShell>();
 
